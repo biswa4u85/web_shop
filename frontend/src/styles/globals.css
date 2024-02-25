@@ -60,9 +60,25 @@
     z-index: 999;
 }
 
+.breadcrumbs {
+    float: left;
+}
+
 .headerRight {
     float: right;
     padding: 20px;
+}
+
+.viewDetails {
+    margin: 20px;
+}
+
+.mainTable {
+    background: #fff;
+    border: solid 1px #e5e5e5;
+    margin: 10px;
+    padding: 0;
+    border-radius: 10px;
 }
 
 @media only screen and (max-width:991px) {
@@ -72,5 +88,14 @@
 
     #content.active {
         width: 100% !important;
+    }
+
+    .breadcrumbs,
+    .headerRight {
+        float: none;
+    }
+
+    .mainTable {
+        overflow-x: scroll;
     }
 }

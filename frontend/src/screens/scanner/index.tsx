@@ -1,155 +1,80 @@
 "use client"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Quagga from "quagga";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import {
-  Table,
-  Space,
-  Tag,
-  Button,
-  Dropdown,
-  Avatar,
-  Menu,
-  Upload
+  Spin,
+  Input,
+  Button
 } from "antd";
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { LiaProductHunt } from "react-icons/lia";
-import { usePostFile, useFetchByLoad } from "../../contexts";
-import { CiMenuKebab } from "react-icons/ci";
-import { FormData } from "./FormData";
-import { ViewData } from "./ViewData";
-import { CreateDataDrawer, EditDataDrawer, DeleteDataModal, StatusDataModal, ViewDataDrawer } from "../../components/Forms";
+import { useFetchByLoad } from "../../contexts";
+import { ViewData } from "../products/ViewData";
 const resource = "products";
 
 export default function Lists() {
-  const [detail, setDetail] = useState<any>(null);
-
-  const { create, data: file, loading: loadingFile } = usePostFile();
-
-  const [query, setQuery] = useState({ "skip": 0, "take": 10 })
-  const { fetch, data, loading } = useFetchByLoad({ url: resource, query: JSON.stringify(query) });
-
-  useEffect(() => {
-    fetch()
-  }, [query, file])
-
-  const refreshData = () => {
-    fetch()
-    setDetail(null)
+  const [load, setLoad] = useState(true)
+  const barcodeRef = useRef(null);
+  const { fetch, data, loading } = useFetchByLoad();
+  const fetchData = (sku: any) => {
+    fetch({ url: resource, query: JSON.stringify({ skip: 0, take: 1, sku }) })
+    // Quagga.stop();
+    setLoad(false)
   }
 
-  const columns = [
-    {
-      title: "Image",
-      dataIndex: "images",
-      render: (text: any) => text ? <Avatar shape="square" src={<img src={text} alt="" />} /> : <LiaProductHunt size={30} />
-    },
-    {
-      title: "Title",
-      dataIndex: "title",
-      sorter: true,
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      sorter: true,
-    },
-    {
-      title: "Categories",
-      dataIndex: "categories",
-      sorter: true,
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      render(val: any) {
-        return <Tag color={val ? "success" : "error"}>{val ? "INACTIVE" : "ACTIVE"}</Tag>;
+  const initializeScanner = () => {
+    setLoad(true)
+    Quagga.init({
+      inputStream: {
+        name: 'Live',
+        type: 'LiveStream',
+        target: barcodeRef.current,
+        constraints: {
+          width: 640,
+          height: 480,
+          facingMode: 'environment'
+        },
       },
-    },
-    {
-      title: "Actions",
-      dataIndex: "address",
-      key: "address",
-      render: (_value: any, record: any) => (
-        <Dropdown
-          overlay={
-            <Menu>
-              <Menu.Item key="1">
-                <Button
-                  type="link"
-                  onClick={() => setDetail({ ...record, "view": true })}
-                >
-                  VIEW
-                </Button>
-              </Menu.Item>
-              <Menu.Item key="2">
-                <Button
-                  type="link"
-                  onClick={() => setDetail({ ...record, "edit": true })}
-                >
-                  EDIT
-                </Button>
-              </Menu.Item>
-              <Menu.Item key="3">
-                <Button
-                  type="link"
-                  onClick={() => setDetail({ ...record, "active": true })}
-                >
-                  {record.status ? "INACTIVE" : "ACTIVE"}
-                </Button>
-              </Menu.Item>
-              <Menu.Item key="4">
-                <Button
-                  type="link"
-                  onClick={() => setDetail({ ...record, "delete": true })}
-                >
-                  DELETE
-                </Button>
-              </Menu.Item>
-            </Menu>
-          }
-        >
-          <Button type="text" onClick={(e) => e.preventDefault()}>
-            <CiMenuKebab />
-          </Button>
-        </Dropdown>
-      ),
-    },
-  ];
+      decoder: {
+        readers: ['ean_reader', 'upc_reader'],
+      },
+    }, (err: any) => {
+      if (err) {
+        console.error('Error initializing Quagga:', err);
+        return;
+      }
+      Quagga.start();
+    });
+
+    Quagga.onDetected((result: any) => {
+      if (result?.codeResult?.code) {
+        console.log('Barcode', result?.codeResult?.code);
+        fetchData(result?.codeResult?.code)
+      }
+    });
+  };
+
+  useEffect(() => {
+    initializeScanner()
+    return () => {
+      Quagga.stop();
+    };
+  }, []);
 
   return (
     <>
-      <div className="headerRight">
-        <Space>
-          <Upload
-            showUploadList={false}
-            customRequest={({ file }) => create('products/import_img', file)}>
-            <Button type="primary" icon={loadingFile ? <LoadingOutlined /> : <PlusOutlined />}>Import Images</Button>
-          </Upload>
-          <Upload
-            showUploadList={false}
-            customRequest={({ file }) => create('products/import', file)}>
-            <Button type="primary" icon={loadingFile ? <LoadingOutlined /> : <PlusOutlined />}>Import File</Button>
-          </Upload>
-        </Space>
-      </div>
       <Breadcrumbs pageName="Scanner" />
-      <div className="fixed">
-        <Button type="primary" onClick={() => setDetail({ "add": true })} className="addButton">
-          ADD
-        </Button>
+      <div className="viewDetails">
+        {loading && (<div style={{ textAlign: 'center' }}><Spin /></div>)}
+
+        {load && (<div ref={barcodeRef} style={{ width: '100%', height: 100, textAlign: "center" }}>
+          <Input placeholder="Basic usage" onChange={(obj) => fetchData(obj.target.value)} style={{ margin: 20, width: "80%" }} />
+        </div>)}
+
+        {!load && (<div style={{ width: '100%', height: 100, textAlign: "center", clear: "both" }}><Button onClick={() => setLoad(true)}>Load</Button></div>)}
+        {(!load && data && data?.data) && (<div className="viewDetails">
+          <ViewData data={data.data[0]} />
+        </div>)}
       </div>
-      <Table className="mainTable" loading={loading} dataSource={data?.data ?? []} columns={columns} pagination={{
-        showQuickJumper: true,
-        total: data?.count ?? 0,
-        onChange: (page, pageSize) => {
-          setQuery({ "skip": ((page - 1) * pageSize), "take": pageSize });
-        },
-      }} />
-      {(detail && detail.add) && (<CreateDataDrawer resource={resource} close={refreshData} FormData={FormData} data={detail} />)}
-      {(detail && detail.edit) && (<EditDataDrawer resource={resource} close={refreshData} FormData={FormData} data={detail} />)}
-      {(detail && detail.delete) && (<DeleteDataModal resource={resource} close={refreshData} data={detail} />)}
-      {(detail && detail.active) && (<StatusDataModal resource={resource} close={refreshData} data={detail} />)}
-      {(detail && detail.view) && (<ViewDataDrawer resource={resource} close={refreshData} ViewData={ViewData} data={detail} />)}
     </>
   );
 }

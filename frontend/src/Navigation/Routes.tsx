@@ -10,7 +10,6 @@ const Scanner = lazy(() => import('../screens/scanner'));
 export const Navigation = () => {
     return (
         <Routes>
-
             <Route element={<Dashboard />}>
                 <Route element={<ProtectedRoute />}>
                     <Route path="/" element={<Products />} />
@@ -18,9 +17,7 @@ export const Navigation = () => {
                     <Route path="/*" element={<Products />} />
                 </Route>
             </Route>
-
             <Route path="/login" element={<Login />} />
-
         </Routes>
     )
 }

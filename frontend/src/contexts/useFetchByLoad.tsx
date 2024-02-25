@@ -2,13 +2,14 @@ import { useState, useContext } from 'react';
 import { MainContext } from "../contexts/mainProvider";
 import apis from "./apis";
 
-export function useFetchByLoad(params: any) {
+export function useFetchByLoad() {
     const { token } = useContext(MainContext)
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(false);
-    const fetch = async () => {
+    const fetch = async (params: any) => {
         try {
             setLoading(true);
+            setData(null);
             const response: any = await apis.getDataApi(params.url, params.query ? JSON.parse(params.query) : {}, token);
             if (response) {
                 setData(response);

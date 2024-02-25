@@ -26,14 +26,14 @@ export default function Lists() {
   const { create, data: file, loading: loadingFile } = usePostFile();
 
   const [query, setQuery] = useState({ "skip": 0, "take": 10 })
-  const { fetch, data, loading } = useFetchByLoad({ url: resource, query: JSON.stringify(query) });
+  const { fetch, data, loading } = useFetchByLoad();
 
   useEffect(() => {
-    fetch()
+    fetch({ url: resource, query: JSON.stringify(query) })
   }, [query, file])
 
   const refreshData = () => {
-    fetch()
+    fetch({ url: resource, query: JSON.stringify(query) })
     setDetail(null)
   }
 
@@ -118,6 +118,7 @@ export default function Lists() {
 
   return (
     <>
+      <Breadcrumbs pageName="Products" />
       <div className="headerRight">
         <Space>
           <Upload
@@ -132,7 +133,6 @@ export default function Lists() {
           </Upload>
         </Space>
       </div>
-      <Breadcrumbs pageName="Products" />
       <div className="fixed">
         <Button type="primary" onClick={() => setDetail({ "add": true })} className="addButton">
           ADD
