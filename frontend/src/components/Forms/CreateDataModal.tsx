@@ -16,7 +16,7 @@ export const CreateDataModal = ({ resource, close, FormData, data }: any) => {
             onCancel={() => close()}
             footer={null}
         >
-            <h1 className="text-sm">{`Add New ${resource}`}</h1>
+            <h3>{`Add New ${resource}`}</h3>
             <FormData initialValues={data} handleUpdate={handleUpdate} loading={loading} />
         </Modal>
     );

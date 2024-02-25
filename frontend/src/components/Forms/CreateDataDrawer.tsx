@@ -11,7 +11,7 @@ export const CreateDataDrawer = ({ resource, close, FormData, data }: any) => {
         close()
     }
     return (
-        <Drawer mask={true} width="70%" title={`Add ${resource}`} placement="right" onClose={() => close(null)} open={true} footer={<div className="p-7"></div>}>
+        <Drawer maskClosable={false} mask={true} width="70%" title={`Add ${resource}`} placement="right" onClose={() => close(null)} open={true} footer={<div className="p-7"></div>}>
             <FormData initialValues={data} handleUpdate={handleUpdate} loading={loading} />
         </Drawer>
     );

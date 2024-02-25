@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 export const StatusDataModal = ({ resource, close, data }: any) => {
     const { edit, data: respond, loading } = usePatch();
     const handleUpdate = (body: any) => {
-        edit(resource, { ...body, status: (data.status == "active" ? "inactive" : "active") })
+        edit(resource, { id: body.id, status: (data.status ? false : true) })
     }
     if (respond) {
         toast.success(`Status update successfully`);
@@ -16,7 +16,7 @@ export const StatusDataModal = ({ resource, close, data }: any) => {
             onCancel={() => close()}
             footer={null}
         >
-            <h1 className="pb-2 text-sm">{`Are you sure you want to ${data.status == "active" ? "inactive" : "active"} this?`}</h1>
+            <h3>{`Are you sure you want to ${data.status ? "inactive" : "active"} this?`}</h3>
             <Row gutter={20}>
                 <Col>
                     <Button onClick={() => close(null)} size="large">
@@ -31,7 +31,7 @@ export const StatusDataModal = ({ resource, close, data }: any) => {
                         type="primary"
                         danger
                     >
-                        {data.status == "active" ? "INACTIVE" : "ACTIVE"}
+                        {data.status ? "INACTIVE" : "ACTIVE"}
                     </Button>
                 </Col>
             </Row>

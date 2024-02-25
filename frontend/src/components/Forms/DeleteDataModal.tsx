@@ -16,8 +16,8 @@ export const DeleteDataModal = ({ resource, close, data }: any) => {
             onCancel={() => close()}
             footer={null}
         >
-            <h1 className="pb-2 text-sm">Are you sure you want to delete this?</h1>
-            <p className="pb-2">This action cannot be undone. This will be deleted forever.</p>
+            <h3>Are you sure you want to delete this?</h3>
+            <p>This action cannot be undone. This will be deleted forever.</p>
             <Row gutter={20}>
                 <Col>
                     <Button onClick={() => close(null)} size="large">

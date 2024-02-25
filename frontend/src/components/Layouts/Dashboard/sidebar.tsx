@@ -1,33 +1,36 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { MdOutlineSportsBaseball } from "react-icons/md";
-import { HiOutlineUserCircle } from "react-icons/hi";
+import { CiBarcode } from "react-icons/ci";
+import { LiaProductHunt } from "react-icons/lia";
 import { MainContext } from "../../../contexts/mainProvider";
+import { IoIosSettings } from "react-icons/io";
+import { FaRegUserCircle } from "react-icons/fa";
 
 export const Sidebar = () => {
-  const { logout, user } = useContext(MainContext)
+  const { labels, logout, user, sidebar } = useContext(MainContext)
 
   let menuItems: any = [
     {
-      icon: <MdOutlineSportsBaseball />,
-      label: "APARTMENTS",
-      value: "admin/apartments",
+      icon: <LiaProductHunt />,
+      label: "PRODUCTS",
+      value: "",
       isShow: true,
     },
     {
-      icon: <HiOutlineUserCircle />,
-      label: "FAVORITES",
-      value: "admin/favorites",
+      icon: <CiBarcode />,
+      label: "SCANNER",
+      value: "scanner",
       isShow: true,
     },
   ];
 
   return (
-    <nav id="sidebar-admin-wraper">
+    <nav id="sidebar-admin-wraper" className={sidebar ? "active" : ''}>
       <div className="my-account-logo">
-        <NavLink to="/admin">
-          <img src="images/logo-dark.png" alt="" />
+        <NavLink to="/">
+          <img src="images/logo.png" alt="" />
         </NavLink>
+        <span>{labels.sitename}</span>
       </div>
 
       <div className="admin-nav scrollbar-inner">
@@ -46,19 +49,19 @@ export const Sidebar = () => {
         <div className="pro-pic-info-wrap d-flex">
           <div className="pro-log-left d-flex">
             <div className="pro-pic-box">
-              <img src="images/user.jpg" alt="" />
+              {user?.image ? <img src={user?.image} alt="" /> : <FaRegUserCircle color="#000" size={30} />}
             </div>
             <div className="pro-pic-info">
-              <strong>{user?.full_name ?? ""}</strong>
-              <span>{user?.full_name ?? ""}</span>
+              <strong>{user?.name ?? ""}</strong>
+              <span>{user?.role ?? ""}</span>
             </div>
           </div>
-          <div className="pro-log-right d-flex">
+          {/* <div className="pro-log-right d-flex">
             <span className="feather-icon has-toltip">
-              <div onClick={() => logout()}><i className="feather-power"></i></div>
+              <div onClick={() => logout()}><IoIosSettings /></div>
               <span className="header-toltip">Logout</span>
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
     </nav>

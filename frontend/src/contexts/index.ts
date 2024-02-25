@@ -5,4 +5,5 @@ export * from "./useFetchSingle";
 export * from "./usePost";
 export * from "./usePatch";
 export * from "./useDelete";
+export * from "./usePostFile";
 export * from "./useStorage";

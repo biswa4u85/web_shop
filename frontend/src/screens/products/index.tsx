@@ -1,30 +1,36 @@
 "use client"
 import { useState, useEffect } from "react";
-import Breadcrumb from "../../components/Breadcrumbs";
+import Breadcrumbs from "../../components/Breadcrumbs";
 import {
   Table,
+  Space,
   Tag,
   Button,
   Dropdown,
-  Menu
+  Avatar,
+  Menu,
+  Upload
 } from "antd";
-import { useFetchByLoad } from "../../contexts";
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { LiaProductHunt } from "react-icons/lia";
+import { usePostFile, useFetchByLoad } from "../../contexts";
 import { CiMenuKebab } from "react-icons/ci";
 import { FormData } from "./FormData";
-import { CreateDataDrawer, EditDataDrawer, DeleteDataModal, StatusDataModal } from "../../components/Forms";
+import { ViewData } from "./ViewData";
+import { CreateDataDrawer, EditDataDrawer, DeleteDataModal, StatusDataModal, ViewDataDrawer } from "../../components/Forms";
 const resource = "products";
 
-export default function Products() {
+export default function Lists() {
   const [detail, setDetail] = useState<any>(null);
+
+  const { create, data: file, loading: loadingFile } = usePostFile();
 
   const [query, setQuery] = useState({ "skip": 0, "take": 10 })
   const { fetch, data, loading } = useFetchByLoad({ url: resource, query: JSON.stringify(query) });
 
-  console.log('data ', data)
-
   useEffect(() => {
     fetch()
-  }, [query])
+  }, [query, file])
 
   const refreshData = () => {
     fetch()
@@ -33,14 +39,31 @@ export default function Products() {
 
   const columns = [
     {
+      title: "Image",
+      dataIndex: "images",
+      render: (text: any) => text ? <Avatar shape="square" src={<img src={text} alt="" />} /> : <LiaProductHunt size={30} />
+    },
+    {
       title: "Title",
       dataIndex: "title",
       sorter: true,
     },
     {
-      title: "Description",
-      dataIndex: "description",
+      title: "Price",
+      dataIndex: "price",
       sorter: true,
+    },
+    {
+      title: "Categories",
+      dataIndex: "categories",
+      sorter: true,
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      render(val: any) {
+        return <Tag color={val ? "success" : "error"}>{val ? "INACTIVE" : "ACTIVE"}</Tag>;
+      },
     },
     {
       title: "Actions",
@@ -53,20 +76,28 @@ export default function Products() {
               <Menu.Item key="1">
                 <Button
                   type="link"
-                  onClick={() => setDetail({ ...record, "edit": true })}
+                  onClick={() => setDetail({ ...record, "view": true })}
                 >
-                  EDIT
+                  VIEW
                 </Button>
               </Menu.Item>
               <Menu.Item key="2">
                 <Button
                   type="link"
-                  onClick={() => setDetail({ ...record, "active": true })}
+                  onClick={() => setDetail({ ...record, "edit": true })}
                 >
-                  {record.status == "active" ? "INACTIVE" : "ACTIVE"}
+                  EDIT
                 </Button>
               </Menu.Item>
               <Menu.Item key="3">
+                <Button
+                  type="link"
+                  onClick={() => setDetail({ ...record, "active": true })}
+                >
+                  {record.status ? "INACTIVE" : "ACTIVE"}
+                </Button>
+              </Menu.Item>
+              <Menu.Item key="4">
                 <Button
                   type="link"
                   onClick={() => setDetail({ ...record, "delete": true })}
@@ -87,11 +118,25 @@ export default function Products() {
 
   return (
     <>
-      <Breadcrumb pageName="Batiments" />
-      <div className="fixed bottom-4 right-4 z-999">
-        <button onClick={() => setDetail({ "add": true })} className="px-4 py-2 font-bold text-white rounded-full shadow-lg bg-primary hover:bg-opacity-90">
+      <div className="headerRight">
+        <Space>
+          <Upload
+            showUploadList={false}
+            customRequest={({ file }) => create('products/import_img', file)}>
+            <Button type="primary" icon={loadingFile ? <LoadingOutlined /> : <PlusOutlined />}>Import Images</Button>
+          </Upload>
+          <Upload
+            showUploadList={false}
+            customRequest={({ file }) => create('products/import', file)}>
+            <Button type="primary" icon={loadingFile ? <LoadingOutlined /> : <PlusOutlined />}>Import File</Button>
+          </Upload>
+        </Space>
+      </div>
+      <Breadcrumbs pageName="Products" />
+      <div className="fixed">
+        <Button type="primary" onClick={() => setDetail({ "add": true })} className="addButton">
           ADD
-        </button>
+        </Button>
       </div>
       <Table className="mainTable" loading={loading} dataSource={data?.data ?? []} columns={columns} pagination={{
         showQuickJumper: true,
@@ -104,6 +149,7 @@ export default function Products() {
       {(detail && detail.edit) && (<EditDataDrawer resource={resource} close={refreshData} FormData={FormData} data={detail} />)}
       {(detail && detail.delete) && (<DeleteDataModal resource={resource} close={refreshData} data={detail} />)}
       {(detail && detail.active) && (<StatusDataModal resource={resource} close={refreshData} data={detail} />)}
+      {(detail && detail.view) && (<ViewDataDrawer resource={resource} close={refreshData} ViewData={ViewData} data={detail} />)}
     </>
   );
 }

@@ -1,6 +1,10 @@
 import axios from "axios";
 import { toast } from 'react-toastify';
 
+export const getAuthorizationToken = (token: any) => {
+    axiosInstance.defaults.headers['Authorization'] = token
+}
+
 export const axiosInstance: any = axios.create({
     baseURL: `${process.env.REACT_APP_BASE_URL}/`,
     headers: {
@@ -10,8 +14,12 @@ export const axiosInstance: any = axios.create({
 
 const showError = (error: any) => {
     console.log('error ', error)
-    if (error?.response?.data?.errMsg) {
-        return toast.error(error?.response?.data?.errMsg);
+    if (error?.response?.data?.message) {
+        return toast.error(error.response.data.message);
+    } else if (error?.request?.statusText) {
+        return toast.error(error?.request?.statusText);
+    } else {
+        return toast.error(error?.message);
     }
 };
 
@@ -29,13 +37,13 @@ const apis = {
             })
             .catch((error: any) => {
                 showError(error);
-                return { error: true, message: error?.message }
             });
     },
     logout: async () => {
         return axiosInstance.defaults.headers['Authorization'] = null
     },
-    getDataApi: async (url: any, query: any) => {
+    getDataApi: async (url: any, query: any, token: any) => {
+        getAuthorizationToken(token)
         let URL = url + "?"
         for (let key in query) {
             URL += `${key}=${query[key]}&`
@@ -51,16 +59,13 @@ const apis = {
             })
             .catch((error: any) => {
                 showError(error);
-                return { error: true, message: error?.message }
             });
     },
-    getSingleDataApi: async (url: any, query: any) => {
-        let URL = url + "?"
-        for (let key in query) {
-            URL += `${key}=${query[key]}&`
-        }
+    getSingleDataApi: async (url: any, query: any, token: any) => {
+        getAuthorizationToken(token)
+        const URL = `${url}/${query.id}`
         return axiosInstance
-            .get(URL, query, { withCredentials: false })
+            .get(URL, { withCredentials: false })
             .then((response: any) => {
                 if (response?.status == 200 || response?.status == 201 || response?.status == 202) {
                     return response?.data
@@ -70,10 +75,10 @@ const apis = {
             })
             .catch((error: any) => {
                 showError(error);
-                return { error: true, message: error?.message }
             });
     },
-    addDataApi: async (url: any, body: any) => {
+    addDataApi: async (url: any, body: any, token: any) => {
+        getAuthorizationToken(token)
         return axiosInstance
             .post(url, body, { withCredentials: false })
             .then((response: any) => {
@@ -85,12 +90,15 @@ const apis = {
             })
             .catch((error: any) => {
                 showError(error);
-                return { error: true, message: error?.message }
             });
     },
-    editDataApi: async (url: any, body: any) => {
+    editDataApi: async (url: any, body: any, token: any) => {
+        getAuthorizationToken(token)
+        const URL = `${url}/${body.id}`
+        delete body.id
+        delete body.edit
         return axiosInstance
-            .patch(`${url}/${body._id}`, body, { withCredentials: false })
+            .patch(URL, body, { withCredentials: false })
             .then((response: any) => {
                 if (response?.status == 200 || response?.status == 201 || response?.status == 202) {
                     return response.data
@@ -100,12 +108,12 @@ const apis = {
             })
             .catch((error: any) => {
                 showError(error);
-                return { error: true, message: error?.message }
             });
     },
-    deleteDataApi: async (url: any, body: any) => {
+    deleteDataApi: async (url: any, body: any, token: any) => {
+        getAuthorizationToken(token)
         return axiosInstance
-            .delete(`${url}/${body._id}`, { withCredentials: false })
+            .delete(`${url}/${body.id}`, { withCredentials: false })
             .then((response: any) => {
                 if (response?.status == 200 || response?.status == 201 || response?.status == 202) {
                     return response.data
@@ -115,24 +123,23 @@ const apis = {
             })
             .catch((error: any) => {
                 showError(error);
-                return { error: true, message: error?.message }
             });
     },
-    fileUploadApi: async (url: any, file: any) => {
-        let body = new FormData();
-        body.append("file", file, file.name);
+    fileUploadApi: async (url: any, file: any, token: any) => {
+        getAuthorizationToken(token)
+        let formData = new FormData();
+        formData.append("file", file);
         return axiosInstance
-            .post(url, body, { withCredentials: false })
+            .post(url, formData, { withCredentials: false })
             .then((response: any) => {
                 if (response?.status == 200 || response?.status == 201 || response?.status == 202) {
-                    return response?.data?.data
+                    return response.data
                 } else {
                     throw new Error(response)
                 }
             })
             .catch((error: any) => {
                 showError(error);
-                return { error: true, message: error?.message }
             });
     },
 };

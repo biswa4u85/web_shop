@@ -1,9 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { Field } from "formik";
 import { Avatar, DatePicker, Select, TreeSelect, Switch } from "antd";
 import apis from "../contexts/apis";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
+import { MainContext } from "../contexts/mainProvider";
+
 const { SHOW_PARENT } = TreeSelect;
 
 const buildTree = (items: any, parentKey = null) => {
@@ -111,23 +113,22 @@ const TextareaBox = (props: any) => {
     <Field name={props.name}>
       {({ field, form, meta }: any) => {
         return <>
-          {props.label && (<label className="mb-2.5 block font-medium text-black dark:text-white">
+          {props.label && (<label>
             {props.label} {(form?.errors[props.name] || props.required) && (<span className="text-meta-1">{"*"}</span>)}
           </label>)}
-          <div className="relative w-full">
+          <div className="form-group">
             <textarea
-              rows={6}
+              rows={10}
               value={field.value}
               onChange={(obj) => {
                 form.setFieldValue(props.name, obj.target.value);
               }}
-              type="text"
               placeholder={props.placeholder}
-              className={"w-full py-2 pl-6 pr-10 bg-transparent border rounded-lg outline-none border-stroke focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary" + ((form?.errors[props.name] && form?.touched[props.name]) && " border-b-meta-1")}
+              className={"form-control sf-form-control" + ((form?.errors[props.name] && form?.touched[props.name]) && " border-b-meta-1")}
               {...props}
             />
             {form?.errors[props.name] && form?.touched[props.name] && (
-              <div className="mt-1 text-xs-1 text-meta-1">{form.errors[props.name]}</div>
+              <div className="danger">{form.errors[props.name]}</div>
             )}
           </div>
         </>
@@ -240,12 +241,13 @@ const MultiSelectBox = (props: any) => {
 };
 
 const FileBox = (props: any) => {
+  const { token } = useContext(MainContext)
   return (
     <Field name={props.name}>
       {({ field, form, meta }: any) => {
 
         const handleFileChange = async (event: any) => {
-          const response: any = await apis.fileUploadApi("files", event.target.files[0]);
+          const response: any = await apis.fileUploadApi("files", event.target.files[0], token);
           if (!response?.error) {
             form.setFieldValue(props.name, response?.url);
           }

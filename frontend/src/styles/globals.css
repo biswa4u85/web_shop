@@ -1,3 +1,19 @@
+::-webkit-scrollbar {
+    width: 5px;
+    height: 7px;
+    cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+    background: #000;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ff8a00;
+    border-radius: 3px;
+}
+
 .form-control.red {
     border: 1px solid #F04F53;
 }
@@ -12,5 +28,49 @@
 
 .admin-nav ul>li>a.active {
     background-color: #f8f9fb;
-    border-right: solid 5px #ff8a00;
+}
+
+.mainTable {
+    padding: 20px;
+}
+
+.addButton {
+    position: fixed;
+    z-index: 999;
+    right: 1rem;
+    border-radius: 20px;
+    bottom: 1rem;
+    box-shadow: 0 13px 35px -12px rgb(61 98 174 / 25%);
+}
+
+.ant-drawer .ant-drawer-footer {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-top: 1px solid rgba(5, 5, 5, 0.06);
+}
+
+.ant-drawer .ant-drawer-footer .p-7 {
+    padding: 1.75rem;
+}
+
+.fixedBottom {
+    position: fixed;
+    bottom: 0.75rem;
+    right: 1.25rem;
+    z-index: 999;
+}
+
+.headerRight {
+    float: right;
+    padding: 20px;
+}
+
+@media only screen and (max-width:991px) {
+    .ant-drawer-content-wrapper {
+        width: 95% !important;
+    }
+
+    #content.active {
+        width: 100% !important;
+    }
 }

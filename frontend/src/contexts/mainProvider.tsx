@@ -43,12 +43,10 @@ export const MainProvider: FC<PropsWithChildren> = ({ children }) => {
         setIsLoading(false)
     }
     const logout = async () => {
-        const response: any = await apis.logout();
-        if (response) {
-            setToken(null)
-            setUser(null)
-            setUser(null)
-        }
+        await apis.logout();
+        setToken(null)
+        setUser(null)
+        setUser(null)
     }
     const handleSidebar = async (value: any) => {
         return setSidebar(value)

@@ -1,4 +1,5 @@
 export default {
+  sitename: "Web Shop",
   continue: "Continue",
   skip: "SKIP",
   signIn: "Sign In",

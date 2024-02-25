@@ -1,5 +1,5 @@
 import { useEffect, useContext } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MainContext } from "../../contexts/mainProvider";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -24,7 +24,7 @@ export default function Login() {
   });
 
   const onPressHandle = async (values: any) => {
-    login({ ...values, deviceId: "" })
+    login({ ...values })
   };
 
   return (
