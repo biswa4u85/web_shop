@@ -2,8 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Query, Delete, Req, Res, Par
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { ProductsService } from './products.service';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { CreateProductDto, UpdateProductDto, QueryProductDto } from './index.dto';
 import { Request, Response } from "express";
 
 import { JwtService } from '../utils/jwt.service';
@@ -19,9 +18,9 @@ export class ProductsController {
   }
 
   @Get()
-  async findAll(@Req() request: Request, @Query('skip', ParseIntPipe) skip: number = 0, @Query('take', ParseIntPipe) take: number = 100, @Query('sku') sku: string = '') {
+  async findAll(@Req() request: Request, @Query() queryProductDto: QueryProductDto) {
     await this.jwtService.verifyToken(request?.headers?.authorization);
-    return this.productsService.findAll(skip, take, sku);
+    return this.productsService.findAll(queryProductDto);
   }
 
   @Get(':id')
@@ -44,14 +43,14 @@ export class ProductsController {
 
   @Post('/import')
   @UseInterceptors(FileInterceptor('file'))
-  async importData(@Req() request: Request, @UploadedFile() file: any) {
+  async importData(@Req() request: Request, @UploadedFile() file: Object) {
     await this.jwtService.verifyToken(request?.headers?.authorization);
     return this.productsService.importData(file);
   }
 
   @Post('/import_img')
   @UseInterceptors(FileInterceptor('file'))
-  async importImages(@Req() request: Request, @UploadedFile() file: any) {
+  async importImages(@Req() request: Request, @UploadedFile() file: Object) {
     await this.jwtService.verifyToken(request?.headers?.authorization);
     return this.productsService.importImages(file);
   }

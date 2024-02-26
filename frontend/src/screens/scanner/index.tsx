@@ -70,7 +70,9 @@ export default function Lists() {
           <Input placeholder="Basic usage" onChange={(obj) => fetchData(obj.target.value)} style={{ margin: 20, width: "80%" }} />
         </div>)}
 
-        {!load && (<div style={{ width: '100%', height: 100, textAlign: "center", clear: "both" }}><Button onClick={() => setLoad(true)}>Load</Button></div>)}
+        {!load && (<div style={{ width: '100%', height: 100, textAlign: "center", clear: "both" }}>
+          {/* <Button onClick={() => setLoad(true)}>Load</Button> */}
+        </div>)}
         {(!load && data && data?.data) && (<div className="viewDetails">
           <ViewData data={data.data[0]} />
         </div>)}

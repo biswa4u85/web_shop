@@ -1,4 +1,6 @@
-export class CreateProductDto {
+import { PartialType } from '@nestjs/mapped-types';
+
+class CreateProductDto {
     status: Boolean
     sku: Number
     language: String
@@ -19,4 +21,18 @@ export class CreateProductDto {
     dogJacketType: String
     supplier: String
     dogJacketSize: String
+}
+
+class UpdateProductDto extends PartialType(CreateProductDto) { }
+
+class QueryProductDto {
+    skip: Number
+    take: Number
+    sku: Number
+}
+
+export {
+    CreateProductDto,
+    UpdateProductDto,
+    QueryProductDto,
 }

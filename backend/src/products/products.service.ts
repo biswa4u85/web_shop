@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+import { CreateProductDto, UpdateProductDto, QueryProductDto } from './index.dto';
 import * as xlsx from 'xlsx';
 
 import { UtilsService } from '../utils/utils.service';
@@ -14,19 +13,18 @@ export class ProductsService {
     this.prisma = this.utilsService.getPrismaClient();
   }
 
-  isNumber(value) {
-    return typeof value === 'number' && !isNaN(value);
-  }
-
-
-  async findAll(skip: number, take: number, sku: string) {
+  async findAll(queryProductDto: QueryProductDto) {
     try {
+      let { skip, take, sku } = queryProductDto
+      skip = +skip ?? 0
+      take = +take ?? 100
       let where: any = {}
       if (sku) {
-        if (this.isNumber(+sku)) {
-          where['sku'] = +sku
-        } else {
+        sku = +sku ?? null
+        if (Number.isNaN(sku)) {
           throw new NotFoundException(`Record Not Found`);
+        } else {
+          where['sku'] = +sku
         }
       }
       const count = await this.prisma.product.count({
