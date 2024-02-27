@@ -32,7 +32,7 @@ export function ViewData({ data }: any) {
             <Descriptions>
                 <Descriptions.Item span={0.5}>{data?.images ? <Image width={100} src={data?.images} /> : <LiaProductHunt size={30} />}</Descriptions.Item>
                 <Descriptions.Item span={2}>{data?.title}</Descriptions.Item>
-                <Descriptions.Item span={0.5}><Tag color={data?.status ? "success" : "error"}>{data?.status ? "INACTIVE" : "ACTIVE"}</Tag></Descriptions.Item>
+                <Descriptions.Item span={0.5}><Tag color={data?.status ? "success" : "error"}>{data?.status ? "ACTIVE" : "INACTIVE"}</Tag></Descriptions.Item>
             </Descriptions>
 
             <hr /><br />

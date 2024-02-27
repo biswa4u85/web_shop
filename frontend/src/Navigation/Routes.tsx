@@ -6,6 +6,7 @@ import Login from '../screens/auth'
 import Products from '../screens/products'
 
 const Scanner = lazy(() => import('../screens/scanner'));
+ 
 
 export const Navigation = () => {
     return (

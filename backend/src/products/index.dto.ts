@@ -28,7 +28,7 @@ class UpdateProductDto extends PartialType(CreateProductDto) { }
 class QueryProductDto {
     skip: Number
     take: Number
-    sku: Number
+    ean: Number
 }
 
 export {

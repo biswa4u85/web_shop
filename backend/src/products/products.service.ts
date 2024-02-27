@@ -15,16 +15,16 @@ export class ProductsService {
 
   async findAll(queryProductDto: QueryProductDto) {
     try {
-      let { skip, take, sku } = queryProductDto
+      let { skip, take, ean } = queryProductDto
       skip = +skip ?? 0
       take = +take ?? 100
       let where: any = {}
-      if (sku) {
-        sku = +sku ?? null
-        if (Number.isNaN(sku)) {
+      if (ean) {
+        ean = +ean ?? null
+        if (Number.isNaN(ean)) {
           throw new NotFoundException(`Record Not Found`);
         } else {
-          where['sku'] = +sku
+          where['ean'] = +ean
         }
       }
       const count = await this.prisma.product.count({
@@ -94,9 +94,9 @@ export class ProductsService {
 
       // You can now process the 'data' as needed
       for (let item of data) {
-        const ifExist = await this.prisma.product.findUnique({ where: { sku: item.sku } });
+        const ifExist = await this.prisma.product.findUnique({ where: { ean: item.ean } });
         if (ifExist) {
-          await this.prisma.product.update({ where: { sku: item.sku }, data: item });
+          await this.prisma.product.update({ where: { ean: item.ean }, data: item });
         } else {
           await this.prisma.product.create({ data: item });
         }
@@ -118,9 +118,9 @@ export class ProductsService {
 
       // You can now process the 'data' as needed
       for (let item of data) {
-        const ifExist = await this.prisma.product.findUnique({ where: { sku: item.sku } });
+        const ifExist = await this.prisma.product.findUnique({ where: { ean: item.ean } });
         if (ifExist) {
-          await this.prisma.product.update({ where: { sku: item.sku }, data: { images: item['Main image'] } });
+          await this.prisma.product.update({ where: { ean: item.ean }, data: { images: item['Main image'] } });
         }
       }
       return 'Images processed successfully';

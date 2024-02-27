@@ -62,7 +62,7 @@ export default function Lists() {
       title: "Status",
       dataIndex: "status",
       render(val: any) {
-        return <Tag color={val ? "success" : "error"}>{val ? "INACTIVE" : "ACTIVE"}</Tag>;
+        return <Tag color={val ? "success" : "error"}>{val ? "ACTIVE" : "INACTIVE"}</Tag>;
       },
     },
     {

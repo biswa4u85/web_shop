@@ -7,8 +7,8 @@ const resource = "products";
 
 export default function Lists() {
   const { fetch, data, loading } = useFetchByLoad();
-  const fetchData = (sku: any) => {
-    fetch({ url: resource, query: JSON.stringify({ skip: 0, take: 1, sku }) })
+  const fetchData = (ean: any) => {
+    fetch({ url: resource, query: JSON.stringify({ "skip": 0, "take": 10, ean }) })
   }
 
   return (
@@ -22,7 +22,7 @@ export default function Lists() {
 
         {loading && (<div className="viewDetails" style={{ textAlign: "center" }}><Spin /></div>)}
 
-        {(data && data?.data) && (<div className="viewDetails"><ViewData data={data.data[0]} /></div>)}
+        {(data && data?.data && data?.data[0]) ? (<div className="viewDetails"><ViewData data={data.data[0]} /></div>) : <div><h3 className="viewDetails">No data found!</h3></div>}
 
       </div>
     </>
