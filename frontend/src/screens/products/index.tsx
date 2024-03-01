@@ -54,6 +54,16 @@ export default function Lists() {
       sorter: true,
     },
     {
+      title: "Location",
+      dataIndex: "location",
+      sorter: true,
+    },
+    {
+      title: "Language",
+      dataIndex: "language",
+      sorter: true,
+    },
+    {
       title: "Categories",
       dataIndex: "categories",
       sorter: true,

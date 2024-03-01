@@ -21,6 +21,7 @@ class CreateProductDto {
     dogJacketType: String
     supplier: String
     dogJacketSize: String
+    location: String
 }
 
 class UpdateProductDto extends PartialType(CreateProductDto) { }
@@ -28,7 +29,7 @@ class UpdateProductDto extends PartialType(CreateProductDto) { }
 class QueryProductDto {
     skip: Number
     take: Number
-    ean: Number
+    search: Number
 }
 
 export {

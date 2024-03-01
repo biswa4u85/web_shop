@@ -24,6 +24,7 @@ model Product {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   status        Boolean   @default(true)
   sku           Int       @unique
+  ean           Int       @unique
   language      String
   categories    String
   title         String
@@ -33,7 +34,6 @@ model Product {
   price         String?
   weight        Int?
   taxValue      Int?
-  ean           Int?
   supplierRef   String?
   brand         String?
   size          String?
@@ -42,4 +42,5 @@ model Product {
   dogJacketType String?
   supplier      String?
   dogJacketSize String?
+  location      String?
 }

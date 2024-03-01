@@ -27,7 +27,8 @@ const initialData = {
     colors: "",
     dogJacketType: "",
     supplier: "",
-    dogJacketSize: ""
+    dogJacketSize: "",
+    location: "",
 }
 
 export function FormData({ initialValues, handleUpdate, loading }: any) {
@@ -79,6 +80,14 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                             name="description"
                             label="Description"
                             placeholder="Enter Description"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <InputBox
+                            name="location"
+                            label="Store Location"
+                            placeholder="Enter Store Location"
+                            icon={<MdOutlineSubtitles />}
                         />
                     </div>
                     <div className="mb-4">
