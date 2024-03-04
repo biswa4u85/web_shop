@@ -31,7 +31,6 @@ model Product {
   description   String
   images        String?
   tags          String?
-  price         String?
   weight        Int?
   taxValue      Int?
   supplierRef   String?
@@ -43,4 +42,7 @@ model Product {
   supplier      String?
   dogJacketSize String?
   location      String?
+  scanCode      String?
+  purchasePrice String?
+  price         String?
 }

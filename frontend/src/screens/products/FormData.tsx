@@ -16,7 +16,6 @@ const initialData = {
     categories: "",
     images: "",
     tags: "",
-    price: "",
     weight: "",
     taxValue: "",
     ean: "",
@@ -29,6 +28,9 @@ const initialData = {
     supplier: "",
     dogJacketSize: "",
     location: "",
+    scanCode: "",
+    purchasePrice: "",
+    webshopPrice: "",
 }
 
 export function FormData({ initialValues, handleUpdate, loading }: any) {
@@ -139,15 +141,6 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                     <div className="mb-4">
                         <InputBox
                             required={true}
-                            name="price"
-                            label="Price"
-                            placeholder="Enter Price"
-                            icon={<MdOutlineSubtitles />}
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <InputBox
-                            required={true}
                             name="weight"
                             label="Weight"
                             type="number"
@@ -244,6 +237,33 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                             name="dogJacketSize"
                             label="Dog Jacket Size"
                             placeholder="Enter Dog Jacket Size"
+                            icon={<MdOutlineSubtitles />}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <InputBox
+                            required={true}
+                            name="scanCode"
+                            label="Scan Code"
+                            placeholder="Enter Scan Code"
+                            icon={<MdOutlineSubtitles />}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <InputBox
+                            required={true}
+                            name="purchasePrice"
+                            label="Purchase Price"
+                            placeholder="Enter Purchase Price"
+                            icon={<MdOutlineSubtitles />}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <InputBox
+                            required={true}
+                            name="webshopPrice"
+                            label="Webshop Price"
+                            placeholder="Enter Webshop Price"
                             icon={<MdOutlineSubtitles />}
                         />
                     </div>

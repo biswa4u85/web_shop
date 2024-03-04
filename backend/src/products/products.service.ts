@@ -125,13 +125,19 @@ export class ProductsService {
 
       // You can now process the 'data' as needed
       for (let item of data) {
-        const ifExist = await this.prisma[resource].findUnique({ where: { ean: item.ean } });
+        const ifExist = await this.prisma[resource].findUnique({ where: { sku: item.sku } });
         if (ifExist) {
-          await this.prisma[resource].update({ where: { ean: item.ean }, data: { images: item['Main image'] } });
+          await this.prisma[resource].update({ where: { sku: item.sku }, data: { 
+            scanCode: item.scanCode,
+            purchasePrice: String(item.purchasePrice),
+            price: String(item.webshopPrice),
+            images: item['Main image']
+           } });
         }
       }
       return 'Images processed successfully';
     } catch (error) {
+      console.log(error)
       await this.utilsService.throwErrors(error);
     }
   }

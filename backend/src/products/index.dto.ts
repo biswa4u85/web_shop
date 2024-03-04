@@ -22,6 +22,8 @@ class CreateProductDto {
     supplier: String
     dogJacketSize: String
     location: String
+    scanCode: String
+    purchasePrice: String
 }
 
 class UpdateProductDto extends PartialType(CreateProductDto) { }
