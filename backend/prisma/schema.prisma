@@ -45,4 +45,5 @@ model Product {
   scanCode      String?
   purchasePrice String?
   price         String?
+  stores        Json[]
 }

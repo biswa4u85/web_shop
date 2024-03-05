@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { Descriptions, Image, Tag } from 'antd';
 import { LiaProductHunt } from "react-icons/lia";
 
@@ -13,6 +13,7 @@ export function ViewData({ data }: any) {
             delete newData.description
             delete newData.images
             delete newData.status
+            delete newData.stores
 
             let details: any = []
             for (let key in newData) {
@@ -35,6 +36,13 @@ export function ViewData({ data }: any) {
                 <Descriptions.Item span={0.5}><Tag color={data?.status ? "success" : "error"}>{data?.status ? "ACTIVE" : "INACTIVE"}</Tag></Descriptions.Item>
             </Descriptions>
 
+            <hr /><br />
+            <Descriptions title="Stores">
+            {data?.stores && data.stores.map((item: any, i: number) => <span key={i} >
+                <Descriptions.Item span={2}>{item?.location}</Descriptions.Item>
+                <Descriptions.Item span={2}><span style={{fontWeight:'bold', marginLeft:10, display:'inline-block'}}> {item?.qty}</span></Descriptions.Item>
+            </span>)}
+            </Descriptions>
             <hr /><br />
 
             <Descriptions title="Description">

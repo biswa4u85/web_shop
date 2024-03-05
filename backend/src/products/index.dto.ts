@@ -24,6 +24,7 @@ class CreateProductDto {
     location: String
     scanCode: String
     purchasePrice: String
+    stores:any
 }
 
 class UpdateProductDto extends PartialType(CreateProductDto) { }

@@ -1,10 +1,11 @@
 "use client"
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import { Spin, Input, Button } from "antd";
 import { useFetchByLoad } from "../../contexts";
 import { ViewData } from "../products/ViewData";
 import { FormData } from "./FormData";
+import { FormDataLaps } from "./FormDataLapsData";
 import { EditDataModal } from "../../components/Forms";
 const resource = "products";
 
@@ -13,8 +14,14 @@ export default function Lists() {
   const [detail, setDetail] = useState<any>(null);
   const [search, setSearch] = useState<any>(null);
 
+  let timer = useRef<any>(null)
+
   const fetchData = (search: any) => {
-    fetch({ url: resource, query: JSON.stringify({ search }) })
+    clearTimeout(timer.current)
+    timer.current = setTimeout(()=>{
+      fetch({ url: resource, query: JSON.stringify({ search }) })
+    }, 500)
+    
   }
 
   return (
@@ -28,11 +35,13 @@ export default function Lists() {
 
         {loading && (<div className="viewDetails" style={{ textAlign: "center" }}><Spin /></div>)}
         {(data && data?.data && data?.data[0]) ? (<div className="viewDetails">
-          <div className="viewDetails" style={{ textAlign: "center" }}><Button type="primary" onClick={() => setDetail({ ...data?.data[0], "edit": true })}>Enter Store Location</Button></div>
+          <div className="viewDetails" style={{ textAlign: "center" }}><Button type="primary" onClick={() => setDetail({ ...data?.data[0], "edit": true })}>Enter Store Location</Button> 
+           <Button type="primary" onClick={() => setDetail({ ...data?.data[0], "editLaps": true })} className="mx-4">Enter LAPS</Button></div>
           <ViewData data={data.data[0]} />
         </div>) : <div><h3 className="viewDetails">No data found!</h3></div>}
 
         {(detail && detail.edit) && (<EditDataModal resource={resource} close={() => { setDetail(null); fetchData(search) }} FormData={FormData} data={detail} />)}
+        {(detail && detail.editLaps) && (<EditDataModal resource={resource} close={() => { setDetail(null); fetchData(search) }} FormData={FormDataLaps} data={detail} />)}
 
       </div>
     </>

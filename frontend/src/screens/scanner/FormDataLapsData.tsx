@@ -15,7 +15,7 @@ const initialData = {
 
 
 
-export function FormData({ initialValues, handleUpdate, loading }: any) {
+export function FormDataLaps({ initialValues, handleUpdate, loading }: any) {
 
     const validationSchema = Yup.object().shape({
         stores: Yup.array().of(
@@ -28,7 +28,7 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
 
     return (
         <Formik
-            initialValues={(initialValues?.stores && initialValues.stores[0]) ? initialValues : initialData}
+        initialValues={(initialValues?.stores && initialValues.stores[0]) ? initialValues : initialData}
             validationSchema={validationSchema}
             onSubmit={(values) => handleUpdate({ id: initialValues.id, stores: values.stores })}
         >
@@ -42,34 +42,40 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                                         <div className="row" key={index}>
                                             <div className="col-md-6">
                                                 <InputBox
-                                                    required
+                                                    readOnly
                                                     name={`stores.${index}.location`}
-                                                    label="Store Location"
-                                                    placeholder="Enter Store Location"
-                                                    icon={<MdOutlineSubtitles />}
+                                                    placeholder="Store Location"
+                                                     
+                                                    
                                                 />
                                             </div>
 
-                                            <div className="col-md-4">
+                                            <div className="col-md-3">
                                                 <InputBox
-                                                    required
-                                                    type='number'
+                                                    readOnly
                                                     name={`stores.${index}.qty`}
-                                                    label="Quantity"
                                                     placeholder="Quantity"
+                                                    value={Number(store.qty) - Number(store.laps)}
+                                                    
+                                                />
+                                            </div>
+
+                                            <div className="col-md-3">
+                                                <InputBox
+                                                type='number'
+                                                    required
+                                                    name={`stores.${index}.laps`}
+                                                    label="Store Laps"
+                                                    placeholder="Laps"
                                                     icon={<MdOutlineSubtitles />}
                                                 />
                                             </div>
-                                            <div className="col-md-2 d-flex align-items-center">
-                                                <Button type="primary" danger onClick={() => remove(index)}>X</Button>
-                                            </div>
+                                            
 
                                         </div>
                                     ))}
 
-                                <Button type="primary" onClick={() => push({ location: '', qty: '' })} className="mb-3">
-                                    ADD
-                                </Button>
+                                 
 
                             </div>
                         )}
