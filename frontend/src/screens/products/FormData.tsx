@@ -4,8 +4,6 @@ import * as Yup from "yup";
 import { useFetch } from "../../contexts";
 import { FaUser, FaPhoneAlt } from "react-icons/fa";
 import { MdEmail, MdOutlineSubtitles } from "react-icons/md";
-import { TbMapNorth } from "react-icons/tb";
-import { FaLocationDot } from "react-icons/fa6";
 
 const initialData = {
     title: "",
@@ -27,7 +25,6 @@ const initialData = {
     dogJacketType: "",
     supplier: "",
     dogJacketSize: "",
-    location: "",
     scanCode: "",
     purchasePrice: "",
     webshopPrice: "",
@@ -82,14 +79,6 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                             name="description"
                             label="Description"
                             placeholder="Enter Description"
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <InputBox
-                            name="location"
-                            label="Store Location"
-                            placeholder="Enter Store Location"
-                            icon={<MdOutlineSubtitles />}
                         />
                     </div>
                     <div className="mb-4">

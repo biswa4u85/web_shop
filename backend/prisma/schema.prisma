@@ -20,11 +20,12 @@ model User {
   image         String?
 }
 
+
 model Product {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   status        Boolean   @default(true)
   sku           Int       @unique
-  ean           Int       @unique
+  ean           String       
   language      String
   categories    String
   title         String
@@ -41,9 +42,14 @@ model Product {
   dogJacketType String?
   supplier      String?
   dogJacketSize String?
-  location      String?
   scanCode      String?
   purchasePrice String?
   price         String?
-  stores        Json[]
+  stores        Store[]
 }
+
+type Store {
+   location String
+   qty      String
+   laps     String?
+ }

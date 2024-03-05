@@ -21,7 +21,6 @@ class CreateProductDto {
     dogJacketType: String
     supplier: String
     dogJacketSize: String
-    location: String
     scanCode: String
     purchasePrice: String
     stores:any

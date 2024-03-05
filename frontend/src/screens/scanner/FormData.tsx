@@ -8,12 +8,10 @@ const initialData = {
     stores: [
         {
             location: "",
-            qty: ""
+            qty: 0
         },
     ],
 }
-
-
 
 export function FormData({ initialValues, handleUpdate, loading }: any) {
 

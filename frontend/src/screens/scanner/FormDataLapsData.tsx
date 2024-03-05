@@ -8,7 +8,8 @@ const initialData = {
     stores: [
         {
             location: "",
-            qty: ""
+            qty: 0,
+            laps: 0
         },
     ],
 }
@@ -28,7 +29,7 @@ export function FormDataLaps({ initialValues, handleUpdate, loading }: any) {
 
     return (
         <Formik
-        initialValues={(initialValues?.stores && initialValues.stores[0]) ? initialValues : initialData}
+            initialValues={(initialValues?.stores && initialValues.stores[0]) ? initialValues : initialData}
             validationSchema={validationSchema}
             onSubmit={(values) => handleUpdate({ id: initialValues.id, stores: values.stores })}
         >
@@ -45,8 +46,8 @@ export function FormDataLaps({ initialValues, handleUpdate, loading }: any) {
                                                     readOnly
                                                     name={`stores.${index}.location`}
                                                     placeholder="Store Location"
-                                                     
-                                                    
+
+
                                                 />
                                             </div>
 
@@ -56,13 +57,13 @@ export function FormDataLaps({ initialValues, handleUpdate, loading }: any) {
                                                     name={`stores.${index}.qty`}
                                                     placeholder="Quantity"
                                                     value={Number(store.qty) - Number(store.laps)}
-                                                    
+
                                                 />
                                             </div>
 
                                             <div className="col-md-3">
                                                 <InputBox
-                                                type='number'
+                                                    type='number'
                                                     required
                                                     name={`stores.${index}.laps`}
                                                     label="Store Laps"
@@ -70,12 +71,12 @@ export function FormDataLaps({ initialValues, handleUpdate, loading }: any) {
                                                     icon={<MdOutlineSubtitles />}
                                                 />
                                             </div>
-                                            
+
 
                                         </div>
                                     ))}
 
-                                 
+
 
                             </div>
                         )}

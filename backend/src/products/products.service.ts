@@ -27,7 +27,9 @@ export class ProductsService {
         } else {
           where['OR'] = [
             { sku: search },
-            { ean: search }
+            { ean: String(search) },
+            { supplierRef: String(search) },
+            { scanCode: String(search) },
           ]
         }
       }
@@ -99,9 +101,10 @@ export class ProductsService {
       // You can now process the 'data' as needed
       for (let item of data) {
         if (item.language == "nl_NL") {
-          const ifExist = await this.prisma[resource].findUnique({ where: { ean: item.ean } });
+          item.ean = String(item.ean)
+          const ifExist = await this.prisma[resource].findUnique({ where: { sku: item.sku } });
           if (ifExist) {
-            await this.prisma[resource].update({ where: { ean: item.ean }, data: item });
+            await this.prisma[resource].update({ where: { sku: item.sku }, data: item });
           } else {
             await this.prisma[resource].create({ data: item });
           }
@@ -127,12 +130,15 @@ export class ProductsService {
       for (let item of data) {
         const ifExist = await this.prisma[resource].findUnique({ where: { sku: item.sku } });
         if (ifExist) {
-          await this.prisma[resource].update({ where: { sku: item.sku }, data: { 
-            scanCode: item.scanCode,
-            purchasePrice: String(item.purchasePrice),
-            price: String(item.webshopPrice),
-            images: item['Main image']
-           } });
+          await this.prisma[resource].update({
+            where: { sku: item.sku }, data: {
+              ean: String(item.ean),
+              scanCode: item.scanCode,
+              purchasePrice: String(item.purchasePrice),
+              price: String(item.webshopPrice),
+              images: item['Main image']
+            }
+          });
         }
       }
       return 'Images processed successfully';

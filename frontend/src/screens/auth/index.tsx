@@ -85,7 +85,7 @@ export default function Login() {
                             />
                           </div>
                           <div className="col-md-12">
-                            <ButtonBox icon={<BiRightArrowAlt />} value={labels.logIn} isLoading={isLoading} onClick={handleSubmit} />
+                            <ButtonBox icon={<BiRightArrowAlt />} value={labels.logIn} loading={isLoading} onClick={handleSubmit} />
                           </div>
                         </div>
                       </div>
