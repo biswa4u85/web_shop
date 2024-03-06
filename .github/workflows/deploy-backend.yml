@@ -29,8 +29,6 @@ jobs:
     - name: Build application
       run: cd backend && npm run build
 
-
-
     - name: Deploy to VPS
       uses: appleboy/ssh-action@master
       with:
