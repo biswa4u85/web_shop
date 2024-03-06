@@ -16,7 +16,7 @@ export class ProductsController {
   @ApiOperation({ summary: 'Creates a new product' })
   @ApiBearerAuth('JWT-auth')
   @ApiBody({ type: CreateProductDto })
-  @ApiOkResponse({ description: 'product has been successfully created.' })
+  @ApiOkResponse({ type: ProductDto })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   async create(@Req() request: Request, @Body() createProductDto: CreateProductDto) {

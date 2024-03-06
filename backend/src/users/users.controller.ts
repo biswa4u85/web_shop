@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiBody,  ApiOkResponse, ApiOperation,  ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { UsersService } from './users.service';
 import { UserDto, CreateUserDto, UpdateUserDto } from './index.dto';
 
@@ -11,7 +11,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Creates a new user' })
   @ApiBearerAuth('JWT-auth')
   @ApiBody({ type: CreateUserDto })
-  @ApiOkResponse({ description: 'User has been successfully created.' })
+  @ApiOkResponse({ type: UserDto })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   create(@Body() createUserDto: CreateUserDto) {

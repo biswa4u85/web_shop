@@ -20,6 +20,14 @@ export class UtilsService {
         };
 
         const apiProperties: ApiProperties = {
+            userId: {
+                description: 'User ID',
+                example: "1234"
+            },
+            role: {
+                description: 'User Role',
+                default: 'user'
+            },
             productId: {
                 description: 'Product ID',
                 example: "1234"
