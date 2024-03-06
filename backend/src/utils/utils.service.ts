@@ -14,6 +14,31 @@ export class UtilsService {
         return this.prisma;
     }
 
+    getApiProperty(propertyName: string): Object {
+        interface ApiProperties {
+            [key: string]: Object;
+        };
+
+        const apiProperties: ApiProperties = {
+            productId: {
+                description: 'Product ID',
+                example: "1234"
+            },
+            stores: {
+                description: 'Stores',
+                example: [
+                    {
+                        location: "string",
+                        qty: "string",
+                        laps: "string"
+                    }
+                ]
+            }
+        };
+
+        return apiProperties[propertyName];
+    }
+
     async throwErrors(error: any) {
         if (error instanceof UnauthorizedException) {
             throw new UnauthorizedException(error);
@@ -26,3 +51,5 @@ export class UtilsService {
         }
     }
 }
+
+export const utils = new UtilsService();

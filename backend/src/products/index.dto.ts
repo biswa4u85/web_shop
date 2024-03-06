@@ -1,41 +1,9 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { OmitType } from "@nestjs/swagger";
 
-class CreateProductDto {
-    status: Boolean
-    sku: Number
-    language: String
-    categories: String
-    title: String
-    description: String
-    images: String
-    tags: String
-    price: String
-    weight: Number
-    taxValue: Number
-    ean: Number
-    supplierRef: String
-    brand: String
-    size: String
-    sizeMixed: String
-    colors: String
-    dogJacketType: String
-    supplier: String
-    dogJacketSize: String
-    scanCode: String
-    purchasePrice: String
-    stores:any
-}
+import ProductsEntity, {QuerysEntity} from "./products.entity";
 
-class UpdateProductDto extends PartialType(CreateProductDto) { }
+export class ProductDto extends ProductsEntity { };
 
-class QueryProductDto {
-    skip: Number
-    take: Number
-    search: Number
-}
-
-export {
-    CreateProductDto,
-    UpdateProductDto,
-    QueryProductDto,
-}
+export class CreateProductDto extends OmitType(ProductDto, ['id']) { };
+export class UpdateProductDto extends OmitType(ProductDto, ['id']) { };
+export class QueryProductDto extends QuerysEntity { };

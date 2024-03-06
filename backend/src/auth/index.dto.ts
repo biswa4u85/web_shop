@@ -1,11 +1,3 @@
-import { PartialType } from '@nestjs/mapped-types';
+import AuthEntity from "./auth.entity";
 
-class AuthDto {
-    email: ""
-    password: ""
-}
-
-
-export {
-    AuthDto
-}
+export class AuthDto extends AuthEntity { };
