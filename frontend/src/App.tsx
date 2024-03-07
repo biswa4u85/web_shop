@@ -16,7 +16,7 @@ function App() {
   return (
     <HashRouter basename={process.env.REACT_APP_BASE_PATH}>
       <MainProvider>
-        <Suspense fallback={<Spin />}>
+        <Suspense fallback={<div className="spnnier"><Spin /></div>}>
           <Navigation />
           <ToastContainer
             position="top-right"

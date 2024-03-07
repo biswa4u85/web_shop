@@ -43,29 +43,29 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                                     {values.stores.length > 0 &&
                                         values?.stores?.map((store: any, index: any) => (
                                             <div className="row" key={index}>
-                                                <div className="col-md-2 d-flex align-items-center">
+                                                <div className="col-2 d-flex align-items-center">
                                                     <Button type="primary" ghost onClick={() => setCode({ index })}><BsQrCode /></Button>
                                                 </div>
-                                                <div className="col-md-5">
+                                                <div className="col-5">
                                                     <InputBox
                                                         required
                                                         name={`stores.${index}.location`}
                                                         label="Store Location"
-                                                        placeholder="Enter Store Location"
+                                                        placeholder="Store Location"
                                                     />
                                                 </div>
 
-                                                <div className="col-md-3">
+                                                <div className="col-3">
                                                     <InputBox
                                                         required
                                                         type='number'
                                                         name={`stores.${index}.qty`}
                                                         label="Quantity"
                                                         placeholder="Quantity"
-                                                        icon={<MdOutlineSubtitles />}
+                                                         
                                                     />
                                                 </div>
-                                                <div className="col-md-2 d-flex align-items-center">
+                                                <div className="col-2 d-flex align-items-center">
                                                     <Button type="primary" danger onClick={() => remove(index)}>X</Button>
                                                 </div>
                                             </div>

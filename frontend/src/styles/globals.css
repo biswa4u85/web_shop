@@ -99,3 +99,11 @@
         overflow-x: scroll;
     }
 }
+
+.ant-modal-body .form-control{padding: 5px;}
+.spnnier{    height: 90vh;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}

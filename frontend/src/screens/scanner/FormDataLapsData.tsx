@@ -33,7 +33,7 @@ export function FormDataLaps({ initialValues, handleUpdate, loading }: any) {
             validationSchema={validationSchema}
             onSubmit={(values) => handleUpdate({ id: initialValues.id, stores: values.stores })}
         >
-            {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+            {({ handleChange, handleBlur, handleSubmit, values, errors, setFieldValue }) => (
                 <>
                     <FieldArray name="stores">
                         {({ remove, push }) => (
@@ -41,7 +41,7 @@ export function FormDataLaps({ initialValues, handleUpdate, loading }: any) {
                                 {values.stores.length > 0 &&
                                     values?.stores?.map((store: any, index: any) => (
                                         <div className="row" key={index}>
-                                            <div className="col-md-6">
+                                            <div className="col-5">
                                                 <InputBox
                                                     readOnly
                                                     name={`stores.${index}.location`}
@@ -51,25 +51,42 @@ export function FormDataLaps({ initialValues, handleUpdate, loading }: any) {
                                                 />
                                             </div>
 
-                                            <div className="col-md-3">
+                                            <div className="col-2">
                                                 <InputBox
                                                     readOnly
                                                     name={`stores.${index}.qty`}
-                                                    placeholder="Quantity"
+                                                    placeholder="QTY"
                                                     value={Number(store.qty) - Number(store.laps)}
 
                                                 />
                                             </div>
 
-                                            <div className="col-md-3">
-                                                <InputBox
+                                            <div className="col-5 d-flex align-items-center">
+                                            <Button type="primary" onClick={() => {
+                                                    let stores = values?.stores
+                                                    if(Number(stores[index].laps) > 0){
+                                                        stores[index] = { ...stores[index], laps: Number(stores[index].laps) - 1 }
+                                                        setFieldValue('stores', stores);
+                                                    }
+                                                    
+                                                }}>-</Button>
+                                                 
+                                                <div className="mx-2"><InputBox
                                                     type='number'
-                                                    required
+                                                    readOnly
                                                     name={`stores.${index}.laps`}
                                                     label="Store Laps"
                                                     placeholder="Laps"
-                                                    icon={<MdOutlineSubtitles />}
+                                                     
                                                 />
+                                                </div>
+                                                <Button type="primary" onClick={() => {
+                                                    let stores = values?.stores
+                                                    if(Number(stores[index].qty) > Number(stores[index].laps)){
+                                                    stores[index] = { ...stores[index], laps: Number(stores[index].laps) + 1 }
+                                                    setFieldValue('stores', stores);
+                                                    }
+                                                }}>+</Button>
                                             </div>
 
 
