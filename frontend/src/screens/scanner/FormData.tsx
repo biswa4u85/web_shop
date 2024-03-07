@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Modal } from "antd";
 import { InputBox, ButtonBox } from "../../components/RenderFroms";
 import { Formik, FieldArray } from "formik";
 import * as Yup from "yup";
-import { MdOutlineSubtitles } from "react-icons/md";
 import { BsQrCode } from "react-icons/bs";
 import { Button } from "antd";
 import { QrReader } from 'react-qr-reader';
+const mobileKeywords = ['Mobi', 'Android', 'iPhone', 'iPad', 'Windows Phone'];
+const tabletKeywords = ['iPad', 'Tablet', 'Android'];
+
 
 const initialData = {
     stores: [
@@ -18,6 +20,10 @@ const initialData = {
 }
 
 export function FormData({ initialValues, handleUpdate, loading }: any) {
+    const ref = useRef<any>(null);
+    const { userAgent } = window.navigator;
+    const isMobile = mobileKeywords.some(keyword => userAgent.includes(keyword));
+    const isTablet = tabletKeywords.some(keyword => userAgent.includes(keyword));
     const [code, setCode] = useState<any>(false);
     const validationSchema = Yup.object().shape({
         stores: Yup.array().of(
@@ -62,7 +68,7 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                                                         name={`stores.${index}.qty`}
                                                         label="Quantity"
                                                         placeholder="Quantity"
-                                                         
+
                                                     />
                                                 </div>
                                                 <div className="col-2 d-flex align-items-center">
@@ -83,6 +89,7 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                             footer={null}
                         >
                             <QrReader
+                                scanDelay={false}
                                 onResult={(result: any) => {
                                     if (!!result) {
                                         let stores = values?.stores
@@ -91,6 +98,9 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                                         setCode(false)
                                     }
                                 }}
+                                style={{ width: "100%" }}
+                                ref={ref}
+                                facingMode={isMobile || isTablet ? 'environment' : 'user'}
                             />
                         </Modal>)}
                     </>
