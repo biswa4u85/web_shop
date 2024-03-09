@@ -19,50 +19,193 @@ model User {
   isEmailVerified Boolean   @default(true)
   role            String    @default("user")
   image           String?
+  quotations      Quotation[]
+  sales           Sales[]
 }
 
+model Brand {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  brandName   String
+  description String?
+  image       String[]
+  createdAt   DateTime     @default(now())
+  createdBy   String       @default("Admin")
+  updatedAt   DateTime     @updatedAt
+  updatedBy   String       @default("Admin")
+  products    Product[]
+}
+
+model Category {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  categoryName String
+  categoryCode String?
+  isParent     Boolean   @default(false)
+  parentId     String?            @default("0")
+  description  String?
+  image        String[]    
+  createdAt    DateTime     @default(now())
+  createdBy    String       @default("Admin")
+  updatedAt    DateTime     @updatedAt
+  updatedBy    String       @default("Admin")
+  products     Product[]
+}
+
+model WareHouse {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  wareHouseName  String
+  wareHouseCode  String?
+  description    String?
+  image          String[]    
+  createdAt      DateTime     @default(now())
+  createdBy      String       @default("Admin")
+  updatedAt      DateTime     @updatedAt
+  updatedBy      String       @default("Admin")
+  products       Product[]
+}
 
 model Product {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  status        Boolean   @default(true)
-  sku           Int       @unique
-  ean           String       
-  language      String
-  categories    String
-  title         String
-  description   String
-  images        String?
-  tags          String?
-  weight        Int?
-  taxValue      Int?
-  supplierRef   String?
-  brand         String?
-  size          String?
-  sizeMixed     String?
-  colors        String?
-  dogJacketType String?
-  supplier      String?
-  dogJacketSize String?
-  scanCode      String?
-  purchasePrice String?
-  price         String?
-  stores        Store[]
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  productName String
+  productCode String?
+  unit        String?
+  sku         String?
+  qty         Int?
+  quantity    Int?         @default(1)
+  descr       String?
+  tax         String?
+  taxAmount   Int?
+  discount    String?
+  price       Int?
+  status      String?
+  image       String[]    
+  subTotal    Int?
+  exist       Boolean      @default(false)
+  expiryDate  DateTime?
+  key         Int?
+  createdAt   DateTime     @default(now())
+  createdBy   String       @default("Admin")
+  updatedAt   DateTime     @updatedAt
+  updatedBy   String       @default("Admin")
+  categoryId  String
+  category    Category     @relation(fields: [categoryId], references: [id])
+  brandId     String
+  brand       Brand        @relation(fields: [brandId], references: [id])
+  wareHouseId String
+  wareHouse   WareHouse    @relation(fields: [wareHouseId], references: [id])
+  purchaseId  String
+  purchase    Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)  
+  sales       Sales[]
 }
 
-type Store {
-   location String
-   qty      String
-   laps     String?
- }
-
- model Quotation {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  status        Boolean   @default(true)
-  items         Item[]
+model Quotation {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  startDate         DateTime?
+  orderTax          String?
+  totalDiscount     Int?
+  shipping          Int?
+  status            String?
+  description       String?
+  grandTotalNumber  Int?
+  selectedProducts  String[]   
+  dueAmount         Int?        @default(0)
+  reference         String      @default("Reference not added")
+  paid              Int?        @default(0)
+  paymentStatus     String      @default("Paid")
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  userId            String
+  user              User    @relation(fields: [userId], references: [id])
 }
 
-type Item {
-   location String
-   qty      String
-   laps     String?
- }
+model Sales {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  startDate         DateTime?
+  orderTax          String?
+  totalDiscount     Int?
+  shipping          Int?
+  status            String?
+  paymentStatus     String      @default("Paid")
+  grandTotalNumber  Int?
+  dueAmount         Int?        @default(0)
+  biller            String      @default("Admin")
+  paymentDate       DateTime?
+  reference         String      @default("Reference not added")
+  receivedAmount    Int?        @default(0)
+  payingAmount      Int?        @default(0)
+  paymentType       String?
+  note              String?
+  invoice           Boolean     @default(false)
+  invoiceNumber     String?
+  dueDate           String      @default("INV00")
+  invoiceStatus     String      @default("Paid")
+  createdAt         DateTime     @default(now())
+  createdBy         String       @default("Admin")
+  updatedAt         DateTime     @updatedAt
+  updatedBy         String       @default("Admin")
+  customerId        String
+  userId            String
+  user              User    @relation(fields: [userId], references: [id])
+  supplierId        String
+  supplier          Supplier?   @relation(fields: [supplierId], references: [id])
+  productId         String
+  product           Product   @relation(fields: [productId], references: [id])
+}
+
+model Purchase {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  purchaseDate      DateTime?
+  referenceNumber   String      @default("Reference not added")
+  orderTax          String?
+  totalDiscount     String?     @default("0")
+  shipping          Int?        @default(0)
+  status            String      @default("Pending")
+  description       String?
+  grandTotalNumber  Int?        @default(0)
+  paid              Int?        @default(0)
+  dueAmount         Int?        @default(0)
+  paymentStatus     String      @default("Paid")
+  paymentType       String?
+  balance           Int?        @default(0)
+  selectedData      String[]   
+  createdAt         DateTime     @default(now())
+  createdBy         String       @default("Admin")
+  updatedAt         DateTime     @updatedAt
+  updatedBy         String       @default("Admin")
+  supplierId        String
+  supplier          Supplier    @relation(fields: [supplierId], references: [id])
+  products          Product[]
+}
+
+model Supplier {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  supplierName String
+  email       String?
+  phone       Int?
+  country     String?
+  code        String?
+  city        String?
+  address     String?
+  descr       String?
+  image       String[] 
+  createdAt   DateTime     @default(now())
+  createdBy   String       @default("Admin")
+  updatedAt   DateTime     @updatedAt
+  updatedBy   String       @default("Admin")
+  purchases   Purchase[]
+  sales       Sales[]
+}
+
+model Store {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  storeName   String?
+  userName    String?
+  phone       Int?
+  email       String?
+  password    String?
+  image       String?
+  status      Boolean @default(false)
+  createdAt   DateTime     @default(now())
+  createdBy   String       @default("Admin")
+  updatedAt   DateTime     @updatedAt
+  updatedBy   String       @default("Admin")
+}
