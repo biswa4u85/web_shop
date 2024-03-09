@@ -1,7 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
+import { ApiTags } from "@nestjs/swagger";
 import { AppService } from './app.service';
 
 @Controller()
+@ApiTags('Apis')
 export class AppController {
   getHello(): any {
     throw new Error('Method not implemented.');

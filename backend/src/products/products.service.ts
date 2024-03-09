@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto, UpdateProductDto, QueryProductDto } from './index.dto';
 import * as xlsx from 'xlsx';
 
-import { UtilsService } from '../utils/utils.service';
+import { UtilsHelpersService } from '../helpers/utils.helpers.service';
 const resource = "product";
 
 @Injectable()
@@ -10,8 +10,10 @@ export class ProductsService {
 
   private prisma
 
-  constructor(private readonly utilsService: UtilsService) {
-    this.prisma = this.utilsService.getPrismaClient();
+  constructor(
+    private readonly utils: UtilsHelpersService
+  ) {
+    this.prisma = this.utils.getPrismaClient();
   }
 
   async findAll(queryProductDto: QueryProductDto) {
@@ -19,9 +21,9 @@ export class ProductsService {
       let { skip, take, search } = queryProductDto
       skip = skip ? +skip : 0
       take = take ? +take : 100
+      search = search ? +search : null
       let where: any = {}
       if (search) {
-        search = search ? +search : null
         if (Number.isNaN(search)) {
           throw new NotFoundException(`Record Not Found`);
         } else {
@@ -44,7 +46,7 @@ export class ProductsService {
       if (!data) throw new NotFoundException(`Record Not Found`);
       return { count, data }
     } catch (error) {
-      await this.utilsService.throwErrors(error);
+      await error
     }
   }
 
@@ -53,7 +55,7 @@ export class ProductsService {
       const single = await this.prisma[resource].findUnique({ where: { id } });
       return single;
     } catch (error) {
-      await this.utilsService.throwErrors(error);
+      await error
     }
   }
 
@@ -61,7 +63,7 @@ export class ProductsService {
     try {
       return this.prisma[resource].create({ data: createProductDto });
     } catch (error) {
-      await this.utilsService.throwErrors(error);
+      await error
     }
   }
 
@@ -74,7 +76,7 @@ export class ProductsService {
       });
       return single;
     } catch (error) {
-      await this.utilsService.throwErrors(error);
+      await error
     }
   }
 
@@ -85,7 +87,7 @@ export class ProductsService {
       });
       return single;
     } catch (error) {
-      await this.utilsService.throwErrors(error);
+      await error
     }
   }
 
@@ -113,7 +115,7 @@ export class ProductsService {
       return 'Data processed successfully';
     } catch (error) {
       console.log(error)
-      await this.utilsService.throwErrors(error);
+      await error
     }
   }
 
@@ -144,7 +146,7 @@ export class ProductsService {
       return 'Images processed successfully';
     } catch (error) {
       console.log(error)
-      await this.utilsService.throwErrors(error);
+      await error
     }
   }
 }

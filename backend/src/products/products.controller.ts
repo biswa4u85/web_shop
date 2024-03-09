@@ -1,16 +1,20 @@
 import { Controller, Get, Post, Body, Patch, Param, Query, Delete, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiQuery, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { ApiTags, ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse, ApiConsumes } from "@nestjs/swagger";
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { ProductsService } from './products.service';
 import { ProductDto, CreateProductDto, UpdateProductDto, QueryProductDto } from './index.dto';
-import { Request, Response } from "express";
+import { Request } from "express";
 
-import { JwtService } from '../utils/jwt.service';
+import { JwtHelpersService } from "../helpers/jwt.helpers.service";
 
 @Controller('products')
+@ApiTags('Products')
 export class ProductsController {
-  constructor(private readonly jwtService: JwtService, private readonly productsService: ProductsService) { }
+  constructor(
+    private readonly jwt: JwtHelpersService,
+    private readonly productsService: ProductsService
+  ) { }
 
   @Post()
   @ApiOperation({ summary: 'Creates a new product' })
@@ -20,18 +24,17 @@ export class ProductsController {
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   async create(@Req() request: Request, @Body() createProductDto: CreateProductDto) {
-    await this.jwtService.verifyToken(request?.headers?.authorization);
+    await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
     return this.productsService.create(createProductDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'show all product' })
   @ApiBearerAuth('JWT-auth')
-  @ApiQuery({ type: QueryProductDto })
   @ApiOkResponse({ type: ProductDto, isArray: true })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async findAll(@Req() request: Request, @Query() queryProductDto: QueryProductDto) {
-    await this.jwtService.verifyToken(request?.headers?.authorization);
+    await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
     return this.productsService.findAll(queryProductDto);
   }
 
@@ -41,7 +44,7 @@ export class ProductsController {
   @ApiOkResponse({ type: ProductDto })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async findOne(@Req() request: Request, @Param('id') id: string) {
-    await this.jwtService.verifyToken(request?.headers?.authorization);
+    await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
     return this.productsService.findOne(id);
   }
 
@@ -53,7 +56,7 @@ export class ProductsController {
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   async update(@Req() request: Request, @Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    await this.jwtService.verifyToken(request?.headers?.authorization);
+    await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
     return this.productsService.update(id, updateProductDto);
   }
 
@@ -64,21 +67,55 @@ export class ProductsController {
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   async remove(@Req() request: Request, @Param('id') id: string) {
-    await this.jwtService.verifyToken(request?.headers?.authorization);
+    await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
     return this.productsService.remove(id);
   }
 
   @Post('/import')
+  @ApiOperation({ summary: 'Import product' })
+  @ApiBearerAuth('JWT-auth')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiOkResponse({ description: 'Products are Imported susscfully' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiBadRequestResponse({ description: 'Bad Request' })
   @UseInterceptors(FileInterceptor('file'))
   async importData(@Req() request: Request, @UploadedFile() file: Object) {
-    await this.jwtService.verifyToken(request?.headers?.authorization);
+    await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
     return this.productsService.importData(file);
   }
 
   @Post('/import_img')
+  @ApiOperation({ summary: 'Import product' })
+  @ApiBearerAuth('JWT-auth')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiOkResponse({ description: 'Images are Imported susscfully' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiBadRequestResponse({ description: 'Bad Request' })
   @UseInterceptors(FileInterceptor('file'))
   async importImages(@Req() request: Request, @UploadedFile() file: Object) {
-    await this.jwtService.verifyToken(request?.headers?.authorization);
+    await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
     return this.productsService.importImages(file);
   }
 }

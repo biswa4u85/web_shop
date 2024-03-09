@@ -3,7 +3,7 @@ import { BadRequestException, ConflictException, Injectable, NotFoundException, 
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class UtilsService {
+export class UtilsHelpersService {
     private prisma: PrismaClient;
 
     constructor() {
@@ -20,6 +20,27 @@ export class UtilsService {
         };
 
         const apiProperties: ApiProperties = {
+            skip: {
+                description: 'skip',
+                example: 0
+            },
+            take: {
+                description: 'take',
+                example: 100
+            },
+            search: {
+                description: 'search',
+                required: false,
+                example: null
+            },
+            email: {
+                description: 'email',
+                example: "a1@admin.com"
+            },
+            password: {
+                description: 'email',
+                example: "Demo@123"
+            },
             userId: {
                 description: 'User ID',
                 example: "1234"
@@ -46,18 +67,6 @@ export class UtilsService {
 
         return apiProperties[propertyName];
     }
-
-    async throwErrors(error: any) {
-        if (error instanceof UnauthorizedException) {
-            throw new UnauthorizedException(error);
-        } else if (error instanceof NotFoundException) {
-            throw new NotFoundException(error);
-        } else if (error instanceof ConflictException) {
-            throw new ConflictException(error);
-        } else {
-            throw new BadRequestException(error);
-        }
-    }
 }
 
-export const utils = new UtilsService();
+export const utils = new UtilsHelpersService();

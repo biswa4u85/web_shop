@@ -1,12 +1,17 @@
 import { Module } from '@nestjs/common';
-import { ProductsService } from './products.service';
-import { ProductsController } from './products.controller';
 
-import { JwtService } from '../utils/jwt.service';
-import { UtilsService } from '../utils/utils.service';
+import JwtHelpersModule from '../helpers/jwt.helpers.module';
+import UtilsHelpersModule from '../helpers/utils.helpers.module';
+
+import { ProductsController } from './products.controller';
+import { ProductsService } from './products.service';
 
 @Module({
+  imports: [
+    JwtHelpersModule,
+    UtilsHelpersModule
+  ],
   controllers: [ProductsController],
-  providers: [ProductsService, JwtService, UtilsService],
+  providers: [ProductsService],
 })
 export class ProductsModule { }

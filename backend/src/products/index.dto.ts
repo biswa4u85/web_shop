@@ -1,6 +1,6 @@
 import { OmitType } from "@nestjs/swagger";
 
-import ProductsEntity, {QuerysEntity} from "./products.entity";
+import ProductsEntity, { QuerysEntity } from "./products.entity";
 
 export class ProductDto extends ProductsEntity { };
 

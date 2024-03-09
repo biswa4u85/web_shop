@@ -1,7 +1,7 @@
 import { Entity, Column } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 
-import { utils } from '../utils/utils.service';
+import { utils } from '../helpers/utils.helpers.service';
 
 @Entity({ name: 'products' })
 export default class ProductsEntity {

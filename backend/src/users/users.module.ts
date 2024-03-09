@@ -1,11 +1,17 @@
 import { Module } from '@nestjs/common';
+
+import JwtHelpersModule from '../helpers/jwt.helpers.module';
+import UtilsHelpersModule from '../helpers/utils.helpers.module';
+
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 
-import { UtilsService } from '../utils/utils.service';
-
 @Module({
+  imports: [
+    JwtHelpersModule,
+    UtilsHelpersModule
+  ],
   controllers: [UsersController],
-  providers: [UsersService, UtilsService],
+  providers: [UsersService],
 })
 export class UsersModule { }

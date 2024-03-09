@@ -3,17 +3,18 @@ import * as multr from 'multer';
 import { MulterModule } from '@nestjs/platform-express';
 
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
-import { ProductsModule } from './products/products.module';
 
+import { modules } from './modules.export';
+
+import { AppService } from './app.service';
 
 @Module({
-  imports: [MulterModule.register({
-    storage: multr.memoryStorage(),
-  }),
-    UsersModule, AuthModule, ProductsModule],
+  imports: [
+    MulterModule.register({
+      storage: multr.memoryStorage(),
+    }),
+    ...modules
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

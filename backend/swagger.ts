@@ -3,8 +3,8 @@ import { INestApplication } from '@nestjs/common';
 
 const setupSwagger = (app: INestApplication): void => {
     const config = new DocumentBuilder()
-        .setTitle('Immproved API')
-        .setDescription('Immproved API')
+        .setTitle('Webshop API')
+        .setDescription('Webshop API')
         .setVersion('1.0')
         .addBearerAuth(
             {

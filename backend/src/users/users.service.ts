@@ -1,8 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from './index.dto';
 
+import { UtilsHelpersService } from '../helpers/utils.helpers.service';
+
 @Injectable()
 export class UsersService {
+
+  private prisma
+
+  constructor(
+    private readonly utils: UtilsHelpersService
+  ) {
+    this.prisma = this.utils.getPrismaClient();
+  }
+
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
