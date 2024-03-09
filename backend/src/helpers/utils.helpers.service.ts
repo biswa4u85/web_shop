@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 
 import { PrismaClient } from '@prisma/client';
 
@@ -31,7 +31,7 @@ export class UtilsHelpersService {
             search: {
                 description: 'search',
                 required: false,
-                example: null
+                example: ''
             },
             email: {
                 description: 'email',
@@ -44,6 +44,13 @@ export class UtilsHelpersService {
             userId: {
                 description: 'User ID',
                 example: "1234"
+            },
+            name: {
+                description: 'Name',
+                example: {
+                    en: "en name",
+                    fr: "fr name"
+                }
             },
             role: {
                 description: 'User Role',
@@ -67,6 +74,28 @@ export class UtilsHelpersService {
 
         return apiProperties[propertyName];
     }
+
+    convertLanguage = async (body: any, langs: any, list: any) => {
+        // let lists = await langsModel.find()
+        // let langs = lists.map(item => JSON.parse(JSON.stringify(item.code)));
+        for (let item of list) {
+            body[item] = langs.reduce((acc, key) => {
+                acc[key] = body[item];
+                return acc;
+            }, {});
+        }
+        return body;
+    };
+
+    updateLanguage = (body: any, set: any, list: any, lang: any) => {
+        for (let item of list) {
+            if (typeof body[item] == "string") {
+                set[`${item}.${lang}`] = body[item];
+                delete body[item];
+            }
+        }
+        return { ...body, $set: set };
+    };
 }
 
 export const utils = new UtilsHelpersService();

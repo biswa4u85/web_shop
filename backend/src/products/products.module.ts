@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import JwtHelpersModule from '../helpers/jwt.helpers.module';
-import UtilsHelpersModule from '../helpers/utils.helpers.module';
+import RepoHelpersModule from '../helpers/repo.helpers.module';
 
 import { ProductsController } from './products.controller';
 import { ProductsService } from './products.service';
@@ -9,7 +9,7 @@ import { ProductsService } from './products.service';
 @Module({
   imports: [
     JwtHelpersModule,
-    UtilsHelpersModule
+    RepoHelpersModule
   ],
   controllers: [ProductsController],
   providers: [ProductsService],

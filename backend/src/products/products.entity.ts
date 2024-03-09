@@ -1,9 +1,8 @@
 import { Entity, Column } from "typeorm";
-import { ApiProperty } from "@nestjs/swagger";
+import { OmitType, ApiProperty } from "@nestjs/swagger";
 
 import { utils } from '../helpers/utils.helpers.service';
 
-@Entity({ name: 'products' })
 export default class ProductsEntity {
 
     @ApiProperty(utils.getApiProperty('productId'))
@@ -91,3 +90,18 @@ export class QuerysEntity {
     @ApiProperty(utils.getApiProperty('search'))
     search: Number
 }
+
+
+export class ProductDto extends ProductsEntity { };
+
+export class CreateProductDto extends OmitType(ProductDto, ['id']) { };
+export class UpdateProductDto extends OmitType(ProductDto, ['id']) { };
+export class QueryProductDto extends QuerysEntity { };
+
+export class GetProductsDto {
+    @ApiProperty({ required: true })
+    count: number;
+
+    @ApiProperty({ type: ProductDto, isArray: true })
+    data: ProductDto[];
+};

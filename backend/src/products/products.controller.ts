@@ -1,10 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Query, Delete, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ApiTags, ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse, ApiConsumes } from "@nestjs/swagger";
+import { Request } from "express";
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { ProductsService } from './products.service';
-import { ProductDto, CreateProductDto, UpdateProductDto, QueryProductDto } from './index.dto';
-import { Request } from "express";
+
+import { GetProductsDto, ProductDto, CreateProductDto, UpdateProductDto, QueryProductDto } from './products.entity';
 
 import { JwtHelpersService } from "../helpers/jwt.helpers.service";
 
@@ -23,19 +24,19 @@ export class ProductsController {
   @ApiOkResponse({ type: ProductDto })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
-  async create(@Req() request: Request, @Body() createProductDto: CreateProductDto) {
+  async createProduct(@Req() request: Request, @Body() createProductDto: CreateProductDto) {
     await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
-    return this.productsService.create(createProductDto);
+    return this.productsService.createProduct(createProductDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'show all product' })
   @ApiBearerAuth('JWT-auth')
-  @ApiOkResponse({ type: ProductDto, isArray: true })
+  @ApiOkResponse({ type: GetProductsDto })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  async findAll(@Req() request: Request, @Query() queryProductDto: QueryProductDto) {
+  async getProducts(@Req() request: Request, @Query() queryProductDto: QueryProductDto) {
     await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
-    return this.productsService.findAll(queryProductDto);
+    return this.productsService.getProducts(queryProductDto);
   }
 
   @Get(':id')
@@ -43,9 +44,9 @@ export class ProductsController {
   @ApiBearerAuth('JWT-auth')
   @ApiOkResponse({ type: ProductDto })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  async findOne(@Req() request: Request, @Param('id') id: string) {
+  async getProductById(@Req() request: Request, @Param('id') id: string) {
     await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
-    return this.productsService.findOne(id);
+    return this.productsService.getProductById(id);
   }
 
   @Patch(':id')
@@ -55,9 +56,9 @@ export class ProductsController {
   @ApiOkResponse({ type: ProductDto })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
-  async update(@Req() request: Request, @Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+  async updateProduct(@Req() request: Request, @Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
-    return this.productsService.update(id, updateProductDto);
+    return this.productsService.updateProduct(id, updateProductDto);
   }
 
   @Delete(':id')
@@ -66,9 +67,9 @@ export class ProductsController {
   @ApiOkResponse({ description: 'product has been Delete.' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
-  async remove(@Req() request: Request, @Param('id') id: string) {
+  async removeProduct(@Req() request: Request, @Param('id') id: string) {
     await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
-    return this.productsService.remove(id);
+    return this.productsService.removeProduct(id);
   }
 
   @Post('/import')
@@ -90,9 +91,9 @@ export class ProductsController {
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   @UseInterceptors(FileInterceptor('file'))
-  async importData(@Req() request: Request, @UploadedFile() file: Object) {
+  async importProducts(@Req() request: Request, @UploadedFile() file: Object) {
     await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
-    return this.productsService.importData(file);
+    return this.productsService.importProducts(file);
   }
 
   @Post('/import_img')
@@ -114,8 +115,8 @@ export class ProductsController {
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   @UseInterceptors(FileInterceptor('file'))
-  async importImages(@Req() request: Request, @UploadedFile() file: Object) {
+  async importProductImages(@Req() request: Request, @UploadedFile() file: Object) {
     await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
-    return this.productsService.importImages(file);
+    return this.productsService.importProductImages(file);
   }
 }

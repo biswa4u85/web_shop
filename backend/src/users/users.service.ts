@@ -1,116 +1,39 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto, QueryUserDto } from './index.dto';
+import { Injectable } from '@nestjs/common';
 
-import { UtilsHelpersService } from '../helpers/utils.helpers.service';
+import { CreateUserDto, UpdateUserDto, QueryUsersDto } from './users.entity';
 
-const resource = "user";
+import { RepoHelpersService } from "../helpers/repo.helpers.service";
+
+import { utils } from '../helpers/utils.helpers.service';
 
 @Injectable()
 export class UsersService {
 
-  private prisma
-
   constructor(
-    private readonly utils: UtilsHelpersService
+    private readonly repo: RepoHelpersService
   ) {
-    this.prisma = this.utils.getPrismaClient();
+
   }
 
-
-  async findAll(queryUserDto: QueryUserDto) {
-    try {
-      let { skip, take, search } = queryUserDto
-      skip = skip ? +skip : 0
-      take = take ? +take : 100
-      search = search ? +search : null
-      let where: any = {}
-      if (search) {
-        if (Number.isNaN(search)) {
-          throw new NotFoundException(`Record Not Found`);
-        } else {
-          where['OR'] = [
-            { sku: search },
-            { ean: String(search) },
-            { supplierRef: String(search) },
-            { scanCode: String(search) },
-          ]
-        }
-      }
-      const count = await this.prisma[resource].count({
-        where
-      })
-      const data = await this.prisma[resource].findMany({
-        skip,
-        take,
-        where
-      });
-      if (!data) throw new NotFoundException(`Record Not Found`);
-      return { count, data }
-    } catch (error) {
-      await error
-    }
+  async getUsers(queryUsersDto: QueryUsersDto) {
+    return await this.repo.getUsers(queryUsersDto);
   }
 
-  async findOne(id: string) {
-    try {
-      const single = await this.prisma[resource].findUnique({ where: { id } });
-      return single;
-    } catch (error) {
-      await error
-    }
+  async getUserById(id: string) {
+    return await this.repo.getUserById(id);
   }
 
-  async create(createUserDto: CreateUserDto) {
-    try {
-      return this.prisma[resource].create({ data: createUserDto });
-    } catch (error) {
-      await error
-    }
+  async createUser(createUserDto: CreateUserDto) {
+    const user = utils.convertLanguage(createUserDto, ['en', 'fr'], ['name'])
+    return await this.repo.createUser(user);
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    try {
-      const single = await this.prisma[resource].update({
-        where: { id },
-        data: updateUserDto
-
-      });
-      return single;
-    } catch (error) {
-      await error
-    }
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+    return await this.repo.updateUser(id, updateUserDto);
   }
 
-  async remove(id: string) {
-    try {
-      const single = await this.prisma[resource].delete({
-        where: { id }
-      });
-      return single;
-    } catch (error) {
-      await error
-    }
+  async removeUser(id: string) {
+    return await this.repo.removeUser(id);
   }
-
-
-  // create(createUserDto: CreateUserDto) {
-  //   return 'This action adds a new user';
-  // }
-
-  // findAll() {
-  //   return `This action returns all users`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} user`;
-  // }
-
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
 
 }
