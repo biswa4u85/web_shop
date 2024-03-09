@@ -53,3 +53,15 @@ type Store {
    qty      String
    laps     String?
  }
+
+ model Quotation {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  status        Boolean   @default(true)
+  items         Item[]
+}
+
+type Item {
+   location String
+   qty      String
+   laps     String?
+ }

@@ -24,3 +24,15 @@ export default class UsersEntity {
     @ApiProperty(utils.getApiProperty('image'))
     image: string;
 }
+
+export class QuerysEntity {
+
+    @ApiProperty(utils.getApiProperty('skip'))
+    skip: number;
+
+    @ApiProperty(utils.getApiProperty('take'))
+    take: number;
+
+    @ApiProperty(utils.getApiProperty('search'))
+    search: Number
+}

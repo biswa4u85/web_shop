@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Req } from '@nestjs/common';
 import { ApiTags, ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { UsersService } from './users.service';
-import { UserDto, CreateUserDto, UpdateUserDto } from './index.dto';
+import { UserDto, CreateUserDto, UpdateUserDto, QueryUserDto } from './index.dto';
 
 @Controller('users')
 @ApiTags('Users')
@@ -24,8 +24,8 @@ export class UsersController {
   @ApiBearerAuth('JWT-auth')
   @ApiOkResponse({ type: UserDto, isArray: true })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Req() request: Request, @Query() queryUserDto: QueryUserDto) {
+    return this.usersService.findAll(queryUserDto);
   }
 
   @Get(':id')
@@ -34,7 +34,7 @@ export class UsersController {
   @ApiOkResponse({ type: UserDto })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+    return this.usersService.findOne(id);
   }
 
   @Patch(':id')
@@ -45,7 +45,7 @@ export class UsersController {
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
@@ -55,6 +55,6 @@ export class UsersController {
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    return this.usersService.remove(id);
   }
 }
