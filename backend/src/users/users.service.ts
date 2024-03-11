@@ -25,6 +25,7 @@ export class UsersService {
 
   async createUser(createUserDto: CreateUserDto) {
     const user = utils.convertLanguage(createUserDto, ['en', 'fr'], ['name'])
+    console.log(user)
     return await this.repo.createUser(user);
   }
 

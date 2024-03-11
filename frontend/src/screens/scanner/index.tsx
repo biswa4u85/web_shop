@@ -1,5 +1,5 @@
 "use client"
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import { Spin, Input, Button } from "antd";
 import { useFetchByLoad } from "../../contexts";
@@ -18,11 +18,16 @@ export default function Lists() {
 
   const fetchData = (search: any) => {
     clearTimeout(timer.current)
-    timer.current = setTimeout(()=>{
+    timer.current = setTimeout(() => {
       fetch({ url: resource, query: JSON.stringify({ search }) })
     }, 500)
-    
   }
+
+  useEffect(() => {
+    if (data?.count > 0) {
+      setSearch(null)
+    }
+  }, [data])
 
   return (
     <>
@@ -30,13 +35,13 @@ export default function Lists() {
       <div className="viewDetails">
 
         <div className="viewDetails">
-          <Input autoFocus placeholder="Basic usage" onChange={(obj) => { setSearch(obj.target.value); fetchData(obj.target.value) }} />
+          <Input autoFocus placeholder="title / barcode / scancode / supplierref / brand / supplier" value={search} onChange={(obj) => { setSearch(obj.target.value); fetchData(obj.target.value) }} />
         </div>
 
         {loading && (<div className="viewDetails" style={{ textAlign: "center" }}><Spin /></div>)}
         {(data && data?.data && data?.data[0]) ? (<div className="viewDetails">
-          <div className="viewDetails" style={{ textAlign: "center" }}><Button type="primary" onClick={() => setDetail({ ...data?.data[0], "edit": true })}>Enter Store Location</Button> 
-           <Button type="primary" onClick={() => setDetail({ ...data?.data[0], "editLaps": true })} className="mx-4">Enter LAPS</Button></div>
+          <div className="viewDetails" style={{ textAlign: "center", display: 'flex', justifyContent: "center" }}><Button type="primary" onClick={() => setDetail({ ...data?.data[0], "edit": true })}>Enter Store Location</Button>
+            <Button type="primary" onClick={() => setDetail({ ...data?.data[0], "editLaps": true })} className="mx-4">Enter LAPS</Button></div>
           <ViewData data={data.data[0]} />
         </div>) : <div><h3 className="viewDetails">No data found!</h3></div>}
 

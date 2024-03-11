@@ -4,6 +4,7 @@ import Breadcrumbs from "../../components/Breadcrumbs";
 import {
   Table,
   Space,
+  Input,
   Tag,
   Button,
   Dropdown,
@@ -22,10 +23,11 @@ const resource = "products";
 
 export default function Lists() {
   const [detail, setDetail] = useState<any>(null);
+  const [search, setSearch] = useState<any>(null);
 
   const { create, data: file, loading: loadingFile } = usePostFile();
 
-  const [query, setQuery] = useState({ "skip": 0, "take": 10 })
+  const [query, setQuery] = useState({ "skip": 0, "take": 10, search: "" })
   const { fetch, data, loading } = useFetchByLoad();
 
   useEffect(() => {
@@ -143,11 +145,14 @@ export default function Lists() {
           ADD
         </Button>
       </div>
+      <div className="viewDetails">
+        <Input autoFocus placeholder="title / barcode / scancode / supplierref / brand / supplier" value={search} onChange={(obj) => { setSearch(obj.target.value); setQuery({ ...query, search: obj.target.value }); }} />
+      </div>
       <Table className="mainTable" loading={loading} dataSource={data?.data ?? []} columns={columns} pagination={{
         showQuickJumper: true,
         total: data?.count ?? 0,
         onChange: (page, pageSize) => {
-          setQuery({ "skip": ((page - 1) * pageSize), "take": pageSize });
+          setQuery({ ...query, "skip": ((page - 1) * pageSize), "take": pageSize });
         },
       }} />
       {(detail && detail.add) && (<CreateDataDrawer resource={resource} close={refreshData} FormData={FormData} data={detail} />)}

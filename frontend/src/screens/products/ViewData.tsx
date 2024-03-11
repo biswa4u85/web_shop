@@ -41,7 +41,7 @@ export function ViewData({ data }: any) {
             <Descriptions title="Stores">
                 {data?.stores && data.stores.map((item: any, i: number) => <span key={i} >
                     <Descriptions.Item span={2}>{item?.location}</Descriptions.Item>
-                    <Descriptions.Item span={2}><span style={{ fontWeight: 'bold', marginLeft: 10, display: 'inline-block' }}> {item?.qty}</span></Descriptions.Item>
+                    <Descriptions.Item span={2}><span style={{ fontWeight: 'bold', marginLeft: 10, display: 'inline-block' }}> {item?.qty}/{item?.laps}</span></Descriptions.Item>
                 </span>)}
             </Descriptions>
 

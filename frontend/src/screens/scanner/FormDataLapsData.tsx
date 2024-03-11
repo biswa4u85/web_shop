@@ -4,17 +4,15 @@ import * as Yup from "yup";
 import { MdOutlineSubtitles } from "react-icons/md";
 import { Button } from "antd";
 
-const initialData = {
-    stores: [
-        {
-            location: "",
-            qty: 0,
-            laps: 0
-        },
-    ],
+const newStore = {
+    location: "",
+    qty: "1",
+    laps: "0"
 }
 
-
+const initialData = {
+    stores: [newStore],
+}
 
 export function FormDataLaps({ initialValues, handleUpdate, loading }: any) {
 
@@ -46,8 +44,6 @@ export function FormDataLaps({ initialValues, handleUpdate, loading }: any) {
                                                     readOnly
                                                     name={`stores.${index}.location`}
                                                     placeholder="Store Location"
-
-
                                                 />
                                             </div>
 
@@ -57,34 +53,31 @@ export function FormDataLaps({ initialValues, handleUpdate, loading }: any) {
                                                     name={`stores.${index}.qty`}
                                                     placeholder="QTY"
                                                     value={Number(store.qty) - Number(store.laps)}
-
                                                 />
                                             </div>
 
                                             <div className="col-5 d-flex align-items-center">
-                                            <Button type="primary" onClick={() => {
+                                                <Button type="primary" onClick={() => {
                                                     let stores = values?.stores
-                                                    if(Number(stores[index].laps) > 0){
-                                                        stores[index] = { ...stores[index], laps: Number(stores[index].laps) - 1 }
+                                                    if (Number(stores[index].laps) > 0) {
+                                                        stores[index] = { ...stores[index], laps: String(Number(stores[index].laps) - 1) }
                                                         setFieldValue('stores', stores);
                                                     }
-                                                    
+
                                                 }}>-</Button>
-                                                 
                                                 <div className="mx-2"><InputBox
                                                     type='number'
                                                     readOnly
                                                     name={`stores.${index}.laps`}
                                                     label="Store Laps"
                                                     placeholder="Laps"
-                                                     
                                                 />
                                                 </div>
                                                 <Button type="primary" onClick={() => {
                                                     let stores = values?.stores
-                                                    if(Number(stores[index].qty) > Number(stores[index].laps)){
-                                                    stores[index] = { ...stores[index], laps: Number(stores[index].laps) + 1 }
-                                                    setFieldValue('stores', stores);
+                                                    if (Number(stores[index].qty) > Number(stores[index].laps)) {
+                                                        stores[index] = { ...stores[index], laps: String(Number(stores[index].laps) + 1) }
+                                                        setFieldValue('stores', stores);
                                                     }
                                                 }}>+</Button>
                                             </div>

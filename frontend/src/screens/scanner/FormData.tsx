@@ -9,14 +9,14 @@ import { QrReader } from 'react-qr-reader';
 const mobileKeywords = ['Mobi', 'Android', 'iPhone', 'iPad', 'Windows Phone'];
 const tabletKeywords = ['iPad', 'Tablet', 'Android'];
 
+const newStore = {
+    location: "",
+    qty: "1",
+    laps: "0"
+}
 
 const initialData = {
-    stores: [
-        {
-            location: "",
-            qty: 0
-        },
-    ],
+    stores: [newStore],
 }
 
 export function FormData({ initialValues, handleUpdate, loading }: any) {
@@ -49,9 +49,9 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                                     {values.stores.length > 0 &&
                                         values?.stores?.map((store: any, index: any) => (
                                             <div className="row" key={index}>
-                                                <div className="col-2 d-flex align-items-center">
+                                                {/* <div className="col-2 d-flex align-items-center">
                                                     <Button type="primary" ghost onClick={() => setCode({ index })}><BsQrCode /></Button>
-                                                </div>
+                                                </div> */}
                                                 <div className="col-5">
                                                     <InputBox
                                                         required
@@ -60,7 +60,6 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                                                         placeholder="Store Location"
                                                     />
                                                 </div>
-
                                                 <div className="col-3">
                                                     <InputBox
                                                         required
@@ -68,7 +67,14 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                                                         name={`stores.${index}.qty`}
                                                         label="Quantity"
                                                         placeholder="Quantity"
-
+                                                    />
+                                                </div>
+                                                <div className="col-2">
+                                                    <InputBox
+                                                        readOnly
+                                                        name={`stores.${index}.laps`}
+                                                        placeholder="Laps"
+                                                        value={store.laps}
                                                     />
                                                 </div>
                                                 <div className="col-2 d-flex align-items-center">
@@ -76,7 +82,7 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                                                 </div>
                                             </div>
                                         ))}
-                                    <Button type="primary" onClick={() => push({ location: '', qty: '' })} className="mb-3">
+                                    <Button type="primary" onClick={() => push(newStore)} className="mb-3">
                                         ADD
                                     </Button>
                                 </div>

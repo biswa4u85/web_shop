@@ -37,7 +37,7 @@ export const MainProvider: FC<PropsWithChildren> = ({ children }) => {
         setIsLoading(true)
         const response: any = await apis.login(params);
         if (response) {
-            setToken(response?.token)
+            setToken(`Bearer ${response?.token}`)
             setUser(response)
         }
         setIsLoading(false)

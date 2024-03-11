@@ -76,8 +76,12 @@ export class PureProductsService {
                 where['OR'] = [
                     { sku: search },
                     { ean: String(search) },
-                    { supplierRef: String(search) },
+                    { title: String(search) },
+                    // { barcode: String(search) },
                     { scanCode: String(search) },
+                    { supplierRef: String(search) },
+                    { brand: String(search) },
+                    { supplier: String(search) },
                 ]
             }
         }
@@ -133,17 +137,19 @@ export class PureProductsService {
         try {
             // You can now process the 'data' as needed
             for (let item of data) {
-                const ifExist = await this.prisma[this.resource].findUnique({ where: { sku: item.sku } });
-                if (ifExist) {
-                    await this.prisma[this.resource].update({
-                        where: { sku: item.sku }, data: {
-                            ean: String(item.ean),
-                            scanCode: item.scanCode,
-                            purchasePrice: String(item.purchasePrice),
-                            price: String(item.webshopPrice),
-                            images: item['Main image']
-                        }
-                    });
+                if (item.sku) {
+                    const ifExist = await this.prisma[this.resource].findUnique({ where: { sku: item.sku } });
+                    if (ifExist) {
+                        await this.prisma[this.resource].update({
+                            where: { sku: item.sku }, data: {
+                                ean: String(item.ean),
+                                scanCode: item.scanCode,
+                                purchasePrice: String(item.purchasePrice),
+                                price: String(item.webshopPrice),
+                                images: item['Main image']
+                            }
+                        });
+                    }
                 }
             }
             return 'Images processed successfully';
