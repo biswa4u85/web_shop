@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 
-import { SignInDto, SignInResponseDto } from "../users/users.entity";
+import { SignInDto, SignInResponseDto } from "../users/users.dto";
 
 import { RepoHelpersService } from "../helpers/repo.helpers.service";
 import { BcryptHelpersService } from '../helpers/bcrypt.helpers.service';

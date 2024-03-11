@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 
-import { CreateUserDto, UpdateUserDto, QueryUsersDto } from './users.entity';
+import { CreateUserDto, QueryUsersDto } from './users.dto';
 
+import { BcryptHelpersService } from '../helpers/bcrypt.helpers.service';
 import { RepoHelpersService } from "../helpers/repo.helpers.service";
+
 
 import { utils } from '../helpers/utils.helpers.service';
 
@@ -10,6 +12,7 @@ import { utils } from '../helpers/utils.helpers.service';
 export class UsersService {
 
   constructor(
+    private readonly bcrypt: BcryptHelpersService,
     private readonly repo: RepoHelpersService
   ) {
 
@@ -24,13 +27,25 @@ export class UsersService {
   }
 
   async createUser(createUserDto: CreateUserDto) {
-    const user = utils.convertLanguage(createUserDto, ['en', 'fr'], ['name'])
-    console.log(user)
+    const hashedPassword = await this.bcrypt.hashString(createUserDto.password);
+    if (!hashedPassword) {
+      throw new BadRequestException('Password could not be hashed.');
+    }
+    createUserDto['password'] = hashedPassword
+    const user = await utils.convertLanguage(createUserDto, ['name'])
     return await this.repo.createUser(user);
   }
 
-  async updateUser(id: string, updateUserDto: UpdateUserDto) {
-    return await this.repo.updateUser(id, updateUserDto);
+  async updateUser(id: string, createUserDto: CreateUserDto) {
+    if (createUserDto.password) {
+      const hashedPassword = await this.bcrypt.hashString(createUserDto.password);
+      if (!hashedPassword) {
+        throw new BadRequestException('Password could not be hashed.');
+      }
+      createUserDto['password'] = hashedPassword
+    }
+    const user = await utils.updateLanguage(createUserDto, ['name'], 'en')
+    return await this.repo.updateUser(id, user);
   }
 
   async removeUser(id: string) {

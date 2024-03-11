@@ -4,7 +4,7 @@ import { Request } from "express";
 
 import { UsersService } from './users.service';
 
-import { UsersDto, GetUsersDto, CreateUserDto, UpdateUserDto, QueryUsersDto } from './users.entity';
+import { UserDto, GetUsersDto, CreateUserDto, QueryUsersDto } from './users.dto';
 
 import { JwtHelpersService } from "../helpers/jwt.helpers.service";
 
@@ -20,7 +20,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Creates a new user' })
   @ApiBearerAuth('JWT-auth')
   @ApiBody({ type: CreateUserDto })
-  @ApiOkResponse({ type: CreateUserDto })
+  @ApiOkResponse({ type: UserDto })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   async createUser(@Req() request: Request, @Body() createUserDto: CreateUserDto) {
@@ -41,7 +41,7 @@ export class UsersController {
   @Get(':id')
   @ApiOperation({ summary: 'show user details' })
   @ApiBearerAuth('JWT-auth')
-  @ApiOkResponse({ type: UsersDto })
+  @ApiOkResponse({ type: UserDto })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   async getUserById(@Req() request: Request, @Param('id') id: string) {
     await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
@@ -52,12 +52,12 @@ export class UsersController {
   @ApiOperation({ summary: 'Update user' })
   @ApiBearerAuth('JWT-auth')
   @ApiBody({ type: CreateUserDto })
-  @ApiOkResponse({ type: UsersDto })
+  @ApiOkResponse({ type: UserDto })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
-  async updateUser(@Req() request: Request, @Param('id') id: string, @Query() queryUsersDto: QueryUsersDto, @Body() updateUserDto: UpdateUserDto) {
+  async updateUser(@Req() request: Request, @Param('id') id: string, @Query('lang') lang: "en", @Body() createUserDto: CreateUserDto) {
     await this.jwt.verifyToken(request?.headers?.authorization, 'admin');
-    return this.usersService.updateUser(id, updateUserDto);
+    return this.usersService.updateUser(id, createUserDto);
   }
 
   @Delete(':id')

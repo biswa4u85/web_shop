@@ -2,18 +2,15 @@ import { OmitType, ApiProperty } from "@nestjs/swagger";
 
 import { utils } from '../helpers/utils.helpers.service';
 
-export class UsersDto {
+export class UserDto {
     @ApiProperty(utils.getApiProperty('userId'))
     id: string;
 
-    @ApiProperty(utils.getApiProperty('nameNew'))
+    @ApiProperty(utils.getApiProperty('name'))
     name: string;
 
     @ApiProperty(utils.getApiProperty('email'))
     email: string;
-
-    @ApiProperty(utils.getApiProperty('password'))
-    password: string;
 
     @ApiProperty(utils.getApiProperty('isEmailVerified'))
     isEmailVerified: boolean;
@@ -23,13 +20,16 @@ export class UsersDto {
 
     @ApiProperty(utils.getApiProperty('image'))
     image: string;
-
-    @ApiProperty(utils.getApiProperty('image'))
-    token: string;
 }
 
-export class CreateUserDto extends OmitType(UsersDto, ['id']) { };
-export class UpdateUserDto extends OmitType(UsersDto, ['id']) { };
+export class CreateUserDto extends OmitType(UserDto, ['id', 'name']) {
+
+    @ApiProperty(utils.getApiProperty('nameNew'))
+    name: string;
+
+    @ApiProperty(utils.getApiProperty('password'))
+    password: string;
+};
 
 export class QueryGetUsersDto {
     @ApiProperty(utils.getApiProperty('skip'))
@@ -51,8 +51,8 @@ export class GetUsersDto {
     @ApiProperty({ required: true })
     count: number;
 
-    @ApiProperty({ type: UsersDto, isArray: true })
-    data: UsersDto[];
+    @ApiProperty({ type: UserDto, isArray: true })
+    data: UserDto[];
 };
 
 export class SignInDto {
@@ -63,7 +63,7 @@ export class SignInDto {
     password: string;
 }
 
-export class SignInResponseDto extends UsersDto {
+export class SignInResponseDto extends UserDto {
     @ApiProperty({
         description: 'The auth token containing userId',
         example: 'jwt_token'

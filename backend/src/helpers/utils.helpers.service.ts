@@ -75,9 +75,10 @@ export class UtilsHelpersService {
         return apiProperties[propertyName];
     }
 
-    convertLanguage = async (body: any, langs: any, list: any) => {
+    convertLanguage = async (body: any, list: any) => {
         // let lists = await langsModel.find()
         // let langs = lists.map(item => JSON.parse(JSON.stringify(item.code)));
+        let langs = ['en', 'fr']
         for (let item of list) {
             body[item] = langs.reduce((acc, key) => {
                 acc[key] = body[item];
@@ -87,14 +88,17 @@ export class UtilsHelpersService {
         return body;
     };
 
-    updateLanguage = (body: any, set: any, list: any, lang: any) => {
+    updateLanguage = (body: any, list: any, lang: any) => {
         for (let item of list) {
             if (typeof body[item] == "string") {
-                set[`${item}.${lang}`] = body[item];
-                delete body[item];
+                body[item] = {
+                    update: {
+                        [lang]: body[item]
+                    }
+                }
             }
         }
-        return { ...body, $set: set };
+        return body
     };
 }
 

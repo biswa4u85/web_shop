@@ -3,7 +3,7 @@ import { ApiBadRequestResponse, ApiBody, ApiOkResponse, ApiOperation, ApiTags } 
 
 import { AuthService } from './auth.service';
 
-import { SignInDto } from '../users/users.entity';
+import { SignInDto } from '../users/users.dto';
 
 @Controller('login')
 @ApiTags('Login')
