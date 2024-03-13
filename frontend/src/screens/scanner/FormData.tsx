@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Modal } from "antd";
 import { InputBox, ButtonBox } from "../../components/RenderFroms";
 import { Formik, FieldArray } from "formik";
@@ -21,10 +21,12 @@ const initialData = {
 
 export function FormData({ initialValues, handleUpdate, loading }: any) {
     const ref = useRef<any>(null);
+    const fieldArrayRef = useRef<any>(null);
     const { userAgent } = window.navigator;
     const isMobile = mobileKeywords.some(keyword => userAgent.includes(keyword));
     const isTablet = tabletKeywords.some(keyword => userAgent.includes(keyword));
     const [code, setCode] = useState<any>(false);
+
     const validationSchema = Yup.object().shape({
         stores: Yup.array().of(
             Yup.object().shape({
@@ -33,6 +35,12 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
             })
         )
     });
+
+    useEffect(() => {
+        if (fieldArrayRef.current) {
+            fieldArrayRef.current.push(newStore);
+        }
+    }, [])
 
     return (
         <>
@@ -44,17 +52,19 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                 {({ handleChange, handleBlur, handleSubmit, values, setFieldValue }) => (
                     <>
                         <FieldArray name="stores">
-                            {({ remove, push }) => (
-                                <div>
+                            {({ remove, push }) => {
+                                fieldArrayRef.current = { remove, push };
+                                return <div>
                                     {values.stores.length > 0 &&
                                         values?.stores?.map((store: any, index: any) => (
                                             <div className="row" key={index}>
                                                 {/* <div className="col-2 d-flex align-items-center">
-                                                    <Button type="primary" ghost onClick={() => setCode({ index })}><BsQrCode /></Button>
-                                                </div> */}
+                                                 <Button type="primary" ghost onClick={() => setCode({ index })}><BsQrCode /></Button>
+                                             </div> */}
                                                 <div className="col-5">
                                                     <InputBox
                                                         required
+                                                        autoFocus
                                                         name={`stores.${index}.location`}
                                                         label="Store Location"
                                                         placeholder="Store Location"
@@ -86,7 +96,7 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                                         ADD
                                     </Button>
                                 </div>
-                            )}
+                            }}
                         </FieldArray>
                         <ButtonBox type="submit" value='Update' loading={loading} onClick={handleSubmit} />
                         {code && (<Modal

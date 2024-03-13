@@ -1,13 +1,15 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { CiBarcode } from "react-icons/ci";
+import { Popconfirm } from 'antd';
 import { LiaProductHunt } from "react-icons/lia";
 import { MainContext } from "../../../contexts/mainProvider";
 import { IoIosSettings } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
 
 export const Sidebar = () => {
-  const { labels, logout, user, sidebar } = useContext(MainContext)
+  const navigate = useNavigate();
+  const { labels, logout, user, sidebar, setSidebar } = useContext(MainContext)
 
   let menuItems: any = [
     {
@@ -38,7 +40,7 @@ export const Sidebar = () => {
           {menuItems.map((item: any, key: any) => {
             if (item.isShow) {
               return (<li key={key} className="">
-                <NavLink to={`/${item.value}`}>{item.icon}<span
+                <NavLink onClick={() => setSidebar(false)} to={`/${item.value}`}>{item.icon}<span
                   className="admin-nav-text">{item.label}</span></NavLink>
               </li>);
             }
@@ -56,12 +58,20 @@ export const Sidebar = () => {
               <span>{user?.role ?? ""}</span>
             </div>
           </div>
-          {/* <div className="pro-log-right d-flex">
-            <span className="feather-icon has-toltip">
-              <div onClick={() => logout()}><IoIosSettings /></div>
-              <span className="header-toltip">Logout</span>
-            </span>
-          </div> */}
+          <div className="pro-log-right d-flex">
+            <Popconfirm
+              title="Logout"
+              description="Are you sure to Logout?"
+              onConfirm={() => { logout(); navigate('/login') }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <span className="feather-icon has-toltip">
+                <div><IoIosSettings /></div>
+                <span className="header-toltip">Logout</span>
+              </span>
+            </Popconfirm>
+          </div>
         </div>
       </div>
     </nav>

@@ -6,7 +6,7 @@ import { MainContext } from "../../../contexts/mainProvider";
 
 export const Header = () => {
   const { logout, sidebar, setSidebar, user } = useContext(MainContext)
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <header id="header-admin-wrap" className="header-admin-fixed">

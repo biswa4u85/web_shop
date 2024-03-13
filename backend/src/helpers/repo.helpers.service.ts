@@ -137,7 +137,7 @@ export class PureProductsService {
         try {
             // You can now process the 'data' as needed
             for (let item of data) {
-                if (item.sku) {
+                if (item?.sku) {
                     const ifExist = await this.prisma[this.resource].findUnique({ where: { sku: item.sku } });
                     if (ifExist) {
                         await this.prisma[this.resource].update({
