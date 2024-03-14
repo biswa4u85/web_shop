@@ -61,7 +61,7 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                                                 {/* <div className="col-2 d-flex align-items-center">
                                                  <Button type="primary" ghost onClick={() => setCode({ index })}><BsQrCode /></Button>
                                              </div> */}
-                                                <div className="col-5">
+                                                <div className="col-4">
                                                     <InputBox
                                                         required
                                                         autoFocus
@@ -79,11 +79,11 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                                                         placeholder="Quantity"
                                                     />
                                                 </div>
-                                                <div className="col-2">
+                                                <div className="col-3">
                                                     <InputBox
                                                         readOnly
                                                         name={`stores.${index}.laps`}
-                                                        placeholder="Laps"
+                                                        placeholder="Stock Out"
                                                         value={store.laps}
                                                     />
                                                 </div>

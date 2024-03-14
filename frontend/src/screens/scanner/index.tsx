@@ -41,7 +41,7 @@ export default function Lists() {
         {loading && (<div className="viewDetails" style={{ textAlign: "center" }}><Spin /></div>)}
         {(data && data?.data && data?.data[0]) ? (<div className="viewDetails">
           <div className="viewDetails" style={{ textAlign: "center", display: 'flex', justifyContent: "center" }}><Button type="primary" onClick={() => setDetail({ ...data?.data[0], "edit": true })}>Enter Store Location</Button>
-            <Button type="primary" onClick={() => setDetail({ ...data?.data[0], "editLaps": true })} className="mx-4">Enter LAPS</Button></div>
+            <Button type="primary" onClick={() => setDetail({ ...data?.data[0], "editLaps": true })} className="mx-4">Enter Stock Out</Button></div>
           <ViewData data={data.data[0]} />
         </div>) : <div><h3 className="viewDetails">No data found!</h3></div>}
 

@@ -1,7 +1,6 @@
 import { InputBox, ButtonBox } from "../../components/RenderFroms";
-import { Formik, Form, FieldArray } from "formik";
+import { Formik, FieldArray } from "formik";
 import * as Yup from "yup";
-import { MdOutlineSubtitles } from "react-icons/md";
 import { Button } from "antd";
 
 const newStore = {
@@ -65,13 +64,20 @@ export function FormDataLaps({ initialValues, handleUpdate, loading }: any) {
                                                     }
 
                                                 }}>-</Button>
-                                                <div className="mx-2"><InputBox
-                                                    type='number'
-                                                    readOnly
-                                                    name={`stores.${index}.laps`}
-                                                    label="Store Laps"
-                                                    placeholder="Laps"
-                                                />
+                                                <div className="mx-2">
+                                                    <InputBox
+                                                        type='number'
+                                                        name={`stores.${index}.laps`}
+                                                        label="Stock Out"
+                                                        placeholder="Stock Out"
+                                                        onChange={(obj: any) => {
+                                                            let stores = values?.stores
+                                                            if (Number(obj.target.value) >= 0 && Number(stores[index].qty) > Number(obj.target.value)) {
+                                                                stores[index] = { ...stores[index], laps: String(obj.target.value) }
+                                                                setFieldValue('stores', stores);
+                                                            }
+                                                        }}
+                                                    />
                                                 </div>
                                                 <Button type="primary" onClick={() => {
                                                     let stores = values?.stores

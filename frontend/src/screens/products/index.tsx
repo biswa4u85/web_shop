@@ -39,6 +39,18 @@ export default function Lists() {
     setDetail(null)
   }
 
+  const calculateTotalQuantity = (data: any) => {
+    let totalQuantity = 0;
+    if (data) {
+      for (const item of data) {
+        totalQuantity += parseInt(item.qty) - parseInt(item.laps);
+      }
+      return totalQuantity;
+    } else {
+      return totalQuantity;
+    }
+  }
+
   const columns = [
     {
       title: "Image",
@@ -56,9 +68,9 @@ export default function Lists() {
       sorter: true,
     },
     {
-      title: "Language",
-      dataIndex: "language",
-      sorter: true,
+      title: "Total Stock",
+      dataIndex: "stores",
+      render: (data: any) => calculateTotalQuantity(data)
     },
     {
       title: "Categories",

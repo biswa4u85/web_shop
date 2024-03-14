@@ -38,10 +38,10 @@ export function ViewData({ data }: any) {
 
             <hr /><br />
 
-            <Descriptions title="Stores">
+            <Descriptions title="Location">
                 {data?.stores && data.stores.map((item: any, i: number) => <span key={i} >
                     <Descriptions.Item span={2}>{item?.location}</Descriptions.Item>
-                    <Descriptions.Item span={2}><span style={{ fontWeight: 'bold', marginLeft: 10, display: 'inline-block' }}> {item?.qty}/{item?.laps}</span></Descriptions.Item>
+                    <Descriptions.Item span={2}><span style={{ fontWeight: 'bold', marginLeft: 10, display: 'inline-block' }}> {Number(item?.qty) - Number(item?.laps)}</span></Descriptions.Item>
                 </span>)}
             </Descriptions>
 
