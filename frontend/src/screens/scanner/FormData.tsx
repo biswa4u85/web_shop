@@ -16,11 +16,12 @@ const newStore = {
 }
 
 const initialData = {
-    stores: [newStore],
+    stores: [],
 }
 
 export function FormData({ initialValues, handleUpdate, loading }: any) {
     const ref = useRef<any>(null);
+    const load = useRef(true)
     const fieldArrayRef = useRef<any>(null);
     const { userAgent } = window.navigator;
     const isMobile = mobileKeywords.some(keyword => userAgent.includes(keyword));
@@ -37,7 +38,8 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
     });
 
     useEffect(() => {
-        if (fieldArrayRef.current) {
+        if (fieldArrayRef.current && load.current) {
+            load.current = false
             fieldArrayRef.current.push(newStore);
         }
     }, [])

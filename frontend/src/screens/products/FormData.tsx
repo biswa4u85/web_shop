@@ -26,8 +26,7 @@ const initialData = {
     supplier: "",
     dogJacketSize: "",
     scanCode: "",
-    purchasePrice: "",
-    webshopPrice: "",
+    purchasePrice: ""
 }
 
 export function FormData({ initialValues, handleUpdate, loading }: any) {
@@ -44,7 +43,7 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
         price: Yup.string().required("Price is required"),
         weight: Yup.number().required("Weight is required"),
         taxValue: Yup.number().required("Tax is required"),
-        ean: Yup.number().required("Ean is required"),
+        ean: Yup.string().required("Ean is required"),
         supplierRef: Yup.string().required("Supplier Ref is required"),
         brand: Yup.string().required("Brand is required"),
         size: Yup.string().required("Size is required"),
@@ -60,10 +59,11 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
         <Formik
             initialValues={initialValues?.edit ? initialValues : initialData}
             validationSchema={validationSchema}
-            onSubmit={(values) => handleUpdate({ ...values, sku: +values.sku, weight: +values.weight, taxValue: +values.taxValue, ean: +values.ean })}
+            onSubmit={(values) => handleUpdate({ ...values, sku: +values.sku, weight: +values.weight, taxValue: +values.taxValue })}
         >
-            {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
-                <div className="w-full p-3">
+            {({ handleChange, handleBlur, handleSubmit, values, errors }) => {
+                console.log(errors)
+                return <div className="w-full p-3">
                     <div className="mb-4">
                         <InputBox
                             required={true}
@@ -152,7 +152,6 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                             required={true}
                             name="ean"
                             label="Ean"
-                            type="number"
                             placeholder="Enter Ean"
                             icon={<MdOutlineSubtitles />}
                         />
@@ -250,9 +249,9 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                     <div className="mb-4">
                         <InputBox
                             required={true}
-                            name="webshopPrice"
-                            label="Webshop Price"
-                            placeholder="Enter Webshop Price"
+                            name="price"
+                            label="Price"
+                            placeholder="Enter Price"
                             icon={<MdOutlineSubtitles />}
                         />
                     </div>
@@ -260,7 +259,7 @@ export function FormData({ initialValues, handleUpdate, loading }: any) {
                         <ButtonBox value={initialValues?.edit ? "Update" : "Add new"} loading={loading} onClick={handleSubmit} />
                     </div>
                 </div>
-            )}
+            }}
         </Formik>
     );
 }
